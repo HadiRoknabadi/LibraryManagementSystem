@@ -1,10 +1,14 @@
+using Infrastructure.WebMarkupMinConfigs;
 using Infrastructures.IoC;
+using WebMarkupMin.AspNetCoreLatest;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddApplicationDbContext(builder.Configuration);
+builder.Services.AddWebMarkupMinServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,8 +21,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseWebMarkupMin();
 
 app.UseAuthorization();
 

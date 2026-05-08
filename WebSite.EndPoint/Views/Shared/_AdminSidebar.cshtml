@@ -1,0 +1,20 @@
+﻿@{
+    var requestedPath = Context.Request.Path;
+}
+
+<!-- Page Sidebar -->
+<div class="page-sidebar" id="sidebar">
+
+    <!-- Sidebar Menu -->
+    <ul class="nav sidebar-menu">
+        <!--Dashboard-->
+        <li class="@(requestedPath == "/" ? "active" : "")">
+            <a asp-controller="Home" asp-action="Dashboard">
+                <i class="menu-icon glyphicon glyphicon-home"></i>
+                <span class="menu-text"> داشبورد </span>
+            </a>
+        </li>
+    </ul>
+    <!-- /Sidebar Menu -->
+</div>
+<!-- /Page Sidebar -->

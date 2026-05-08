@@ -1,0 +1,60 @@
+:root {
+    --primary: #1a9936;
+    --secondary: #1b6cc9;
+}
+
+@font-face {
+    font-family: 'iransans';
+    src: url('../fonts/iransans/IRANSansXFaNum-Regular.ttf');
+}
+
+body{
+    font-family: 'iransans';
+}
+
+
+.login{
+    height: 100vh;
+    background-image: url('../img/back_login.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.login h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.login form {
+    display: block;
+    width: 100%;
+    height: max-content;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    max-width: 350px;
+}
+
+.login form input {
+    display: block;
+    width: 100%;
+    height: max-content;
+    padding: 15px 25px;
+    border-radius: 8px;
+    outline: none;
+    border: 2px solid #ddd;
+    font-size: 14px;
+}
+
+.login form button {
+    display: block;
+    width: max-content;
+    height: max-content;
+    padding: 13px;
+    border-radius: 8px;
+    border: none;
+    margin: 10px 0;
+    width: 100%;
+}
