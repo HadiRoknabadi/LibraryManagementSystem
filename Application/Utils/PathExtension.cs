@@ -2,6 +2,14 @@
 {
     public static string DomainAddress = "";
 
+    #region User
+
+    public static string UserAvatarOrigin= DomainAddress + "/Uploads/images/UserAvatars/Origin/";
+    public static string UserAvatarOriginRelative = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads/images/UserAvatars/Origin/");
+    public static string UserAvatarThumb= DomainAddress + "/Uploads/images/UserAvatars/Thumb/";
+    public static string UserAvatarThumbRelative = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads/images/UserAvatars/Thumb/");
+    #endregion
+
     #region Admin Theme Files
 
     public static string AdminThemeJsFiles = DomainAddress + "/Admin/Js/";
@@ -17,4 +25,11 @@
     public static string LibFiles = DomainAddress + "/lib/";
 
     #endregion
+
+    #region Default Names
+
+    public static string Default_Avatar_Name = "Default_Avatar.png";
+
+    #endregion
+
 }
