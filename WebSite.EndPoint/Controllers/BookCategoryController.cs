@@ -66,5 +66,42 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Edit Book Category
+
+        [Route("EditBookCategory")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBookCategory(EditBookCategoryDTO editBookCategoryDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _bookCategoryService.EditBookCategoryAsync(editBookCategoryDTO);
+
+                switch (result.Status)
+                {
+                    case EditBookCategoryResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    case EditBookCategoryResult.NotFound:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+
+        }
+
+        #endregion
+
+
+
     }
 }

@@ -30,6 +30,7 @@ namespace Infrastructure.FluentValidationConfigs
             #region Book Category
 
             services.AddScoped<IValidator<AddBookCategoryDTO>, AddBookCategoryDTOValidator>();
+            services.AddScoped<IValidator<EditBookCategoryDTO>, EditBookCategoryDTOValidator>();
 
 
             #endregion

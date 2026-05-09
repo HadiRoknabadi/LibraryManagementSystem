@@ -11,6 +11,8 @@ namespace Infrastructure.MappingProfiles
             CreateMap<BookCategory, BookCategoryListItemDTO>();
 
             CreateMap<AddBookCategoryDTO, BookCategory>();
+
+            CreateMap<EditBookCategoryDTO, BookCategory>();
         }
     }
 }

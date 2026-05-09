@@ -67,6 +67,12 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<BookCategory> GetBookCategoryByIdAsync(int boogCategoryId)
+        {
+            return await _context.BookCategories.AsQueryable().SingleOrDefaultAsync(b => b.Id == boogCategoryId);
+        }
+
+
         public async Task<ResultDTO<AddBookCategoryResult>> AddBookCategoryAsync(AddBookCategoryDTO addBookCategoryDTO)
         {
             var result = new ResultDTO<AddBookCategoryResult>
@@ -85,6 +91,33 @@ namespace Application.Services.Implementations
             return result;
 
         }
+
+        public async Task<ResultDTO<EditBookCategoryResult>> EditBookCategoryAsync(EditBookCategoryDTO editBookCategoryDTO)
+        {
+            var result = new ResultDTO<EditBookCategoryResult>
+            {
+                Status=EditBookCategoryResult.Success,
+                Message="دسته بندی با موفقیت ویرایش شد"
+            };
+
+            var boogCategory = await GetBookCategoryByIdAsync(editBookCategoryDTO.Id);
+
+            if(boogCategory==null)
+            {
+                result.Status = EditBookCategoryResult.NotFound;
+                result.Message = "دسته بندی یافت نشد";
+
+                return result;
+            }
+
+            var editedBookCategory = _mapper.Map<EditBookCategoryDTO, BookCategory>(editBookCategoryDTO, boogCategory);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
 
     }
 }

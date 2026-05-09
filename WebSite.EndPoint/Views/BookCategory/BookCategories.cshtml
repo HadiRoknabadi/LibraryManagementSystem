@@ -73,7 +73,7 @@
                                     @bookCategory.Title
                                 </td>
                                 <td>
-                                    <a asp-controller="User" asp-action="EditUser" asp-route-bookCategoryId="@bookCategory.Id"
+                                    <a data-toggle="modal" data-target="#editBookCategoryModal-@bookCategory.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
                                     <a asp-controller="User" asp-action="DeleteUser"
                                        asp-route-userId="@bookCategory.Id" ajax-url-button="@bookCategory.Id"
@@ -130,6 +130,46 @@
     </div>
 </div>
 <!-- end Add Book Category Modal -->
+@if (Model.BookCategories != null && Model.BookCategories.Any())
+{
+    @foreach (var bookCategory in Model.BookCategories)
+    {
+        <!-- Start Edit Book Category Modal -->
+
+        <div class="modal fade" id="editBookCategoryModal-@bookCategory.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش دسته بندی</h5>
+                        <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <form asp-controller="BookCategory" asp-action="EditBookCategory" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                <partial name="_EditBookCategory" model="@(new EditBookCategoryDTO { Id = bookCategory.Id, Title = bookCategory.Title })" />
+                                <div class="custome-modal-footer">
+                                    <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- End Edit Book Category Modal -->
+    }
+}
+
+
 @section Scripts
 {
     @{
