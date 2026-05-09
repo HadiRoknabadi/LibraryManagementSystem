@@ -67,6 +67,24 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<ResultDTO<AddBookCategoryResult>> AddBookCategoryAsync(AddBookCategoryDTO addBookCategoryDTO)
+        {
+            var result = new ResultDTO<AddBookCategoryResult>
+            {
+                Status=AddBookCategoryResult.Success,
+                Message="دسته بندی با موفقیت اضافه شد"
+
+            };
+
+            var bookCategory=_mapper.Map<AddBookCategoryDTO,BookCategory>(addBookCategoryDTO);
+
+            await _context.BookCategories.AddAsync(bookCategory);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
 
     }
 }

@@ -9,6 +9,8 @@ namespace Infrastructure.MappingProfiles
         public BookCategoryMappingProfile()
         {
             CreateMap<BookCategory, BookCategoryListItemDTO>();
+
+            CreateMap<AddBookCategoryDTO, BookCategory>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebSite.EndPoint.Http;
 
 namespace WebSite.EndPoint.Controllers
 {
@@ -32,5 +33,38 @@ namespace WebSite.EndPoint.Controllers
         }
 
         #endregion
+
+        #region Add Book Category
+
+        [Route("AddBookCategory")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBookCategory(AddBookCategoryDTO addBookCategoryDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                var result=await _bookCategoryService.AddBookCategoryAsync(addBookCategoryDTO);
+
+                switch (result.Status)
+                {
+                    case AddBookCategoryResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+
+        }
+
+        #endregion
+
     }
 }

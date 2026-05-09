@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Account;
+using Application.DTOs.BookCategory;
 using Application.DTOs.User;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -25,6 +26,14 @@ namespace Infrastructure.FluentValidationConfigs
 
 
             #endregion
+
+            #region Book Category
+
+            services.AddScoped<IValidator<AddBookCategoryDTO>, AddBookCategoryDTOValidator>();
+
+
+            #endregion
+
 
             return services;
         }
