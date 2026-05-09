@@ -1,0 +1,97 @@
+﻿@model Application.DTOs.BookCategory.FilterBookCategoryDTO
+
+
+@{
+    ViewData["Title"] = "دسته بندی ها";
+}
+
+<div class="container margin-bottom-10">
+    <a asp-controller="User" asp-action="AddUser" class="btn btn-success">افزودن دسته بندی</a>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+    <div class="well with-header">
+        <div class="header bordered-sky">
+            فیلتر
+        </div>
+        <form id="filter-form" asp-controller="BookCategory" asp-action="BookCategories" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="form-group">
+                <label>نام دسته بندی</label>
+                <input asp-for="Title" class="form-control">
+            </div>
+            <hr />
+            <h4>مرتب سازی</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterDataOrder>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.OrderBy)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.OrderBy) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-success btn-block">فیلتر</button>
+        </form>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-8 col-sm-12 col-12 col-xs-12">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        @if (Model.BookCategories != null && Model.BookCategories.Any())
+        {
+            <div class="table-scrollable">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                نام دسته بندی
+                            </th>
+                            <th>
+                                دستورات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bookCategory in Model.BookCategories)
+                        {
+                            <tr id="ajax-url-item-@bookCategory.Id">
+                                <td>
+                                    @bookCategory.Id
+                                </td>
+                                <td>
+                                    @bookCategory.Title
+                                </td>
+                                <td>
+                                    <a asp-controller="User" asp-action="EditUser" asp-route-bookCategoryId="@bookCategory.Id"
+                                       class="btn btn-warning btn-xs">ویرایش</a>
+                                    <a asp-controller="User" asp-action="DeleteUser"
+                                       asp-route-userId="@bookCategory.Id" ajax-url-button="@bookCategory.Id"
+                                       class="btn btn-danger btn-xs">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <Alert type="warning" message="هیچ اطلاعاتی یافت نشد"></Alert>
+        }
+        <div class="footer">
+            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>

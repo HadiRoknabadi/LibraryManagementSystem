@@ -13,6 +13,7 @@ namespace Infrastructures.IoC
             services.AddScoped<IDatabaseContext, ApplicationDbContext>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IRoleService,RoleService>();
+            services.AddScoped<IBookCategoryService,BookCategoryService>();
 
 
             return services;

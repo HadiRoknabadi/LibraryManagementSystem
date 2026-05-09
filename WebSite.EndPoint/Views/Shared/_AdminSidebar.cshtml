@@ -22,6 +22,28 @@
             </a>
         </li>
 
+        <li class="@(requestedPath == "/CafeProducts" || requestedPath == "/BookCategories" || requestedPath == "/Comments" ? "active open" : "")">
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-book"></i>
+                <span class="menu-text"> مدیریت کتاب ها </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li class="@(requestedPath == "/Books" ? "active" : "")">
+                    <a asp-controller="Book" asp-action="Books">
+                        <span class="menu-text">کتاب ها</span>
+                    </a>
+                </li>
+                <li class="@(requestedPath == "/BookCategories" ? "active" : "")">
+                    <a asp-controller="BookCategory" asp-action="BookCategories">
+                        <span class="menu-text">دسته بندی ها</span>
+                    </a>
+                </li>
+            </ul>
+
+        </li>
+
     </ul>
     <!-- /Sidebar Menu -->
 </div>
