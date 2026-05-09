@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Common;
+﻿using Application.DTOs.Account;
+using Application.DTOs.Common;
 using Application.DTOs.Paging;
 using Application.DTOs.User;
 using Application.Extensions;
@@ -11,19 +12,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Implementations
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
 
         #region Constructor
 
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
 
-        public UserService(UserManager<User> userManager, IMapper mapper)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _mapper = mapper;
         }
+
 
         #endregion
 
@@ -169,7 +173,7 @@ namespace Application.Services.Implementations
                 user.UserAvatar = PathExtension.Default_Avatar_Name;
             }
 
-            var createUserResult = await _userManager.CreateAsync(user,userDTO.Password);
+            var createUserResult = await _userManager.CreateAsync(user, userDTO.Password);
 
             if (createUserResult.Succeeded == false)
             {
@@ -237,6 +241,8 @@ namespace Application.Services.Implementations
 
             }
 
+
+
             var editedUser = _mapper.Map<EditUserDTO, User>(editUserDTO, user);
 
             if (editUserDTO.UserAvatarFile != null)
@@ -281,11 +287,13 @@ namespace Application.Services.Implementations
                 return result;
             }
 
+
             if (!string.IsNullOrEmpty(editUserDTO.Password))
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                await _userManager.ResetPasswordAsync(user, token, editUserDTO.Password);
+                var res = await _userManager.ResetPasswordAsync(user, token, editUserDTO.Password);
             }
+
 
             var updateUserResult = await _userManager.UpdateAsync(editedUser);
 
@@ -301,7 +309,7 @@ namespace Application.Services.Implementations
             return result;
         }
 
-        
+
         public async Task<ResultDTO<DeleteUserResult>> DeleteUserAsync(int userId)
         {
             var result = new ResultDTO<DeleteUserResult>
@@ -340,6 +348,41 @@ namespace Application.Services.Implementations
         {
             return await _userManager.Users.AsQueryable().AsNoTracking().AnyAsync(u => u.PhoneNumber == phoneNumber);
         }
+
+        public async Task<ResultDTO<LoginUserResult>> LoginUserAsync(LoginUserDTO loginUserDTO)
+        {
+            var result = new ResultDTO<LoginUserResult>
+            {
+                Status=LoginUserResult.Success,
+                Message="عملیات ورود  با موفقیت انجام شد"
+            };
+
+            var user = await _userManager.FindByNameAsync(loginUserDTO.PhoneNumber);
+
+            if(user== null)
+            {
+                result.Status = LoginUserResult.UserNotFound;
+                result.Message = "کاربری یافت نشد";
+
+                return result;
+            }
+
+            var loginResult =await _signInManager.PasswordSignInAsync(user, loginUserDTO.Password,loginUserDTO.RememberMe,false);
+
+            if (loginResult.Succeeded==false)
+            {
+                result.Status = LoginUserResult.IdentityError;
+                result.Message ="عملیات با خطا مواجه شد";
+
+                return result;
+            }
+
+            return result;
+
+        }
+
+
+
 
 
     }

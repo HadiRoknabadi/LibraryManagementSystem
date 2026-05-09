@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Common;
+﻿using Application.DTOs.Account;
+using Application.DTOs.Common;
 using Application.DTOs.User;
 
 namespace Application.Services.Interfaces
@@ -12,5 +13,6 @@ namespace Application.Services.Interfaces
         Task<ResultDTO<EditUserResult>> EditUserAsync(EditUserDTO editUserDTO);
         Task<bool> IsExistPhoneNumberAsync(string phoneNumber);
         Task<ResultDTO<DeleteUserResult>> DeleteUserAsync(int userId);
+        Task<ResultDTO<LoginUserResult>> LoginUserAsync(LoginUserDTO loginUserDTO);
     }
 }

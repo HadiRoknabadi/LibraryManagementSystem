@@ -1,11 +1,13 @@
-﻿using Application.DTOs.User;
+﻿using Application.DTOs.Role;
+using Application.DTOs.User;
 using Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebSite.EndPoint.Http;
-using Application.DTOs.Role;
 
 namespace WebSite.EndPoint.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : BaseController
     {
         #region Constructor

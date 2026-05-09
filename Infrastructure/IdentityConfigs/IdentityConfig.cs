@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities.Account;
 using Persistence.Context;
 using Application.DTOs.Common;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Infrastructures.IdentityConfigs
 {
@@ -25,7 +26,7 @@ namespace Infrastructures.IdentityConfigs
                 options.Password.RequireNonAlphanumeric = identitySettings.PasswordRequireNonAlphanumeric;
                 options.Password.RequireUppercase = identitySettings.PasswordRequireUppercase;
                 options.User.RequireUniqueEmail = identitySettings.UserRequireUniqueEmail;
-                options.SignIn.RequireConfirmedPhoneNumber = true;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
                 //options.Lockout.MaxFailedAccessAttempts = identitySettings.LockoutMaxFailedAccessAttempts;
                 //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(identitySettings.LockoutDefaultLockoutTimeSpan);
             });
@@ -41,7 +42,12 @@ namespace Infrastructures.IdentityConfigs
                     options.SlidingExpiration = true;
                 });
             }
-            
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(
+                new DirectoryInfo(Directory.GetCurrentDirectory() + "\\wwwroot\\Auth\\"))
+                .SetApplicationName("LibraryManagementSystem").SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+
             return services;
         }
     }

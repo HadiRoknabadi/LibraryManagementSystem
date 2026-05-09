@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="fa-IR" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>کتابخانه | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="@(PathExtension.LibFiles)bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="@(PathExtension.AdminThemeCssFiles)login_layout_style.css">
+    <link rel="stylesheet" href="@(PathExtension.LibFiles)toastmessage/toastmessage.min.css" asp-append-version="true">
+
+</head>
+<body>
+
+    @RenderBody()
+
+
+    <script src="@(PathExtension.LibFiles)jquery/dist/jquery.min.js"></script>
+    <script src="@(PathExtension.AdminThemeJsFiles)login.js"></script>
+    <script src="@(PathExtension.LibFiles)toastmessage/toastmessage.min.js" asp-append-version="true"></script>
+    <script src="@(PathExtension.LibFiles)sweetalert/sweetalert.min.js" asp-append-version="true"></script>
+    <partial name="_SiteMessages" />
+    @RenderSection("Scripts", false)
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+﻿@model Application.DTOs.Account.LoginUserDTO
+
+@{
+    ViewData["Title"] = "ورود";
+
+    Layout = "_LoginLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center login">
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
+                <h2>ورود</h2>
+                <div class="form-group">
+                    <input asp-for="PhoneNumber" placeholder="شماره موبایل خود  را وارد کنید">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-2">
+                    <input asp-for="Password" type="password" placeholder="رمز عبور خود را وارد کنید">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                </div>
+                <div class="form-group mt-2 text-right">
+                    <label>مرا به خاطر بسپار</label>
+                    <input type="checkbox" asp-for="RememberMe" style="display:inline !important;width:auto !important"/>
+                </div>
+
+                <partial name="_CaptchaPartial" />
+
+
+                <button class="btn btn-success" type="submit">ورود</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

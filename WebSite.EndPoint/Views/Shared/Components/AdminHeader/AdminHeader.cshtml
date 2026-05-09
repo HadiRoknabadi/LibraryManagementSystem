@@ -1,7 +1,7 @@
-﻿@* @{
+﻿@{
     var userFullName = (string)ViewData["UserFullName"];
     var userAvatar = (string)ViewData["UserAvatar"];
-} *@
+}
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -32,19 +32,19 @@
                         <li>
                             <a class="login-area dropdown-toggle" data-toggle="dropdown">
                                 <div class="avatar" title="View your public profile">
-                                    @* <img src="@(PathExtension.UserAvatarThumb + userAvatar)" class="avatar"> *@
+                                    <img src="@(PathExtension.UserAvatarThumb + userAvatar)" class="avatar">
                                 </div>
                                 <section>
-                                    @* <h2><span class="profile"><span>@userFullName</span></span></h2> *@
+                                    <h2><span class="profile"><span>@userFullName</span></span></h2>
                                 </section>
                             </a>
                             <!--Login Area Dropdown-->
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                @* <li class="username"><a>@userFullName</a></li> *@
+                                <li class="username"><a>@userFullName</a></li>
                                 <!--Avatar Area-->
                                 <li>
                                     <div class="avatar-area">
-                                        @* <img src="@(PathExtension.UserAvatarThumb + userAvatar)" class="avatar"> *@
+                                        <img src="@(PathExtension.UserAvatarThumb + userAvatar)" class="avatar">
                                     </div>
                                 </li>
                                 <!--Avatar Area-->

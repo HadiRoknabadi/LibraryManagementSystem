@@ -1,4 +1,5 @@
 using Application.DTOs.Common;
+using Infrastructure.CaptchaConfigs;
 using Infrastructure.FluentValidationConfigs;
 using Infrastructure.MappingProfiles;
 using Infrastructure.WebMarkupMinConfigs;
@@ -16,7 +17,7 @@ builder.Services.Configure<SiteSettings>(builder.Configuration.GetSection(nameof
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddApplicationDbContext(builder.Configuration);
-builder.Services.AddIdentityService(siteSettings.IdentitySettings);
+builder.Services.AddIdentityService(siteSettings.IdentitySettings,siteSettings.CookieSettings);
 builder.Services.RegisterServices();
 
 builder.Services.AddAutoMapper(cfg =>
@@ -25,6 +26,8 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 builder.Services.AddFluentValidationService();
+
+builder.Services.AddCaptcha();
 
 #region Html Encoder
 
