@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.BookCategory;
+using Application.DTOs.User;
+using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +8,7 @@ using WebSite.EndPoint.Http;
 
 namespace WebSite.EndPoint.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class BookCategoryController : BaseController
     {
         #region Constructor
@@ -41,9 +43,9 @@ namespace WebSite.EndPoint.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBookCategory(AddBookCategoryDTO addBookCategoryDTO)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var result=await _bookCategoryService.AddBookCategoryAsync(addBookCategoryDTO);
+                var result = await _bookCategoryService.AddBookCategoryAsync(addBookCategoryDTO);
 
                 switch (result.Status)
                 {
@@ -101,6 +103,29 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Delete Book Category
+
+        [Route("DeleteBookCategory/{bookCategoryId}")]
+        public async Task<IActionResult> DeleteBookCategory(int bookCategoryId)
+        {
+            var result = await _bookCategoryService.DeleteBookCategoryAsync(bookCategoryId);
+            switch (result.Status)
+            {
+                case DeleteBookCategoryResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeleteBookCategoryResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+
+        }
+
+        #endregion
 
 
     }

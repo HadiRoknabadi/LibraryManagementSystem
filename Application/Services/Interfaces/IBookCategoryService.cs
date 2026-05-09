@@ -10,5 +10,6 @@ namespace Application.Services.Interfaces
         Task<BookCategory> GetBookCategoryByIdAsync(int boogCategoryId);
         Task<ResultDTO<AddBookCategoryResult>> AddBookCategoryAsync(AddBookCategoryDTO addBookCategoryDTO);
         Task<ResultDTO<EditBookCategoryResult>> EditBookCategoryAsync(EditBookCategoryDTO editBookCategoryDTO);
+        Task<ResultDTO<DeleteBookCategoryResult>> DeleteBookCategoryAsync(int bookCategoryId);
     }
 }

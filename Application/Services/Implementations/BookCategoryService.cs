@@ -118,6 +118,32 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<DeleteBookCategoryResult>> DeleteBookCategoryAsync(int bookCategoryId)
+        {
+            var result = new ResultDTO<DeleteBookCategoryResult>
+            {
+                Status=DeleteBookCategoryResult.Success,
+                Message="دسته بندی با موفقیت حذف شد"
+            };
+
+            var boogCategory = await GetBookCategoryByIdAsync(bookCategoryId);
+
+            if (boogCategory == null)
+            {
+                result.Status = DeleteBookCategoryResult.NotFound;
+                result.Message = "دسته بندی یافت نشد";
+
+                return result;
+            }
+
+            boogCategory.IsDelete = true;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
 
     }
 }
