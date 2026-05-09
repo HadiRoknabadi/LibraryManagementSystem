@@ -14,5 +14,6 @@ namespace Application.Services.Interfaces
         Task<bool> IsExistPhoneNumberAsync(string phoneNumber);
         Task<ResultDTO<DeleteUserResult>> DeleteUserAsync(int userId);
         Task<ResultDTO<LoginUserResult>> LoginUserAsync(LoginUserDTO loginUserDTO);
+        Task LogOutUserAsync();
     }
 }

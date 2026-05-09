@@ -65,5 +65,22 @@ namespace WebSite.EndPoint.Controllers
         }
 
         #endregion
+
+        #region LogOut
+
+        [Authorize]
+        [Route("LogOut")]
+        public async Task<IActionResult> LogOut()
+        {
+            await _userService.LogOutUserAsync();
+
+            TempData[Toast_SuccessMessage] = "با موفقیت خارج شدید";
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        #endregion
+
+
     }
 }

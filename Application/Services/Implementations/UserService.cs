@@ -381,6 +381,10 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task LogOutUserAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
 
 
 
