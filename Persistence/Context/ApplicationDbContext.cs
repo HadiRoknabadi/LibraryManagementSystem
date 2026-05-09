@@ -1,6 +1,7 @@
 ﻿using Application.Services.Interfaces.Context;
 using Application.Utils;
 using Domain.Entities.Account;
+using Domain.Entities.Book;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,12 @@ namespace Persistence.Context
         {
 
         }
+
+        #region Book
+
+        public DbSet<BookCategory> BookCategories { get; set; }
+
+        #endregion
 
 
         protected override void OnModelCreating(ModelBuilder builder)
