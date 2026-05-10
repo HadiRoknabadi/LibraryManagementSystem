@@ -2,11 +2,11 @@
 @using Application.DTOs.Author
 
 @{
-    ViewData["Title"] = "دسته بندی ها";
+    ViewData["Title"] = "نویسندگان";
 }
 
 <div class="container margin-bottom-10">
-    <a data-toggle="modal" data-target="#addBookCategoryModal" class="btn btn-success">افزودن دسته بندی</a>
+    <a data-toggle="modal" data-target="#addAuthorModal" class="btn btn-success">افزودن نویسنده</a>
 </div>
 
 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
@@ -98,11 +98,11 @@
 
 <!-- start Add Book Category Modal -->
 
-<div class="modal fade" id="addBookCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">افزودن دسته بندی</h5>
+                <h5 class="modal-title" id="exampleModalLabel">افزودن نویسنده</h5>
                 <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -111,11 +111,11 @@
 
                 <div class="form-group">
 
-                    <form asp-controller="BookCategory" asp-action="AddBookCategory" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                    <form asp-controller="Author" asp-action="AddAuthor" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
 
 
 
-                        @* <partial name="_AddBookCategory" model="@(new AddBookCategoryDTO { })" /> *@
+                        <partial name="_AddAuthor" model="@(new AddAuthorDTO { })" />
                         <div class="custome-modal-footer">
                             <button type="submit" class="btn btn-success pull-right">ثبت</button>
                             <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>

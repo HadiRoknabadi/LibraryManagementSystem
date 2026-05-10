@@ -68,6 +68,23 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<AddAuthorResult>> AddAuthorAsync(AddAuthorDTO addAuthorDTO)
+        {
+            var result = new ResultDTO<AddAuthorResult>
+            {
+                Status = AddAuthorResult.Success,
+                Message = "نویسنده با موفقیت اضافه شد"
+
+            };
+
+            var author = _mapper.Map<AddAuthorDTO, Author>(addAuthorDTO);
+
+            await _context.Authors.AddAsync(author);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
 
 
     }

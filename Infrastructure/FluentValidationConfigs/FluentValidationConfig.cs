@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Account;
+using Application.DTOs.Author;
 using Application.DTOs.BookCategory;
 using Application.DTOs.User;
 using FluentValidation;
@@ -35,6 +36,12 @@ namespace Infrastructure.FluentValidationConfigs
 
             #endregion
 
+            #region Author
+
+            services.AddScoped<IValidator<AddAuthorDTO>, AddAuthorDTOValidator>();
+
+
+            #endregion
 
             return services;
         }

@@ -9,6 +9,8 @@ namespace Infrastructure.MappingProfiles
         public AuthorMappingProfile()
         {
             CreateMap<Author, AuthorListItemDTO>();
+
+            CreateMap<AddAuthorDTO, Author>();
         }
     }
 }
