@@ -1,0 +1,179 @@
+﻿@model FilterAuthorDTO
+@using Application.DTOs.Author
+
+@{
+    ViewData["Title"] = "دسته بندی ها";
+}
+
+<div class="container margin-bottom-10">
+    <a data-toggle="modal" data-target="#addBookCategoryModal" class="btn btn-success">افزودن دسته بندی</a>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+    <div class="well with-header">
+        <div class="header bordered-sky">
+            فیلتر
+        </div>
+        <form id="filter-form" asp-controller="Author" asp-action="Authors" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="form-group">
+                <label>نام و نام خانوادگی نویسنده</label>
+                <input asp-for="FullName" class="form-control">
+            </div>
+            <hr />
+            <h4>مرتب سازی</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterDataOrder>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.OrderBy)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.OrderBy) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-success btn-block">فیلتر</button>
+        </form>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-8 col-sm-12 col-12 col-xs-12">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        @if (Model.Authors != null && Model.Authors.Any())
+        {
+            <div class="table-scrollable">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                نام دسته بندی
+                            </th>
+                            <th>
+                                دستورات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var author in Model.Authors)
+                        {
+                            <tr id="ajax-url-item-@author.Id">
+                                <td>
+                                    @author.Id
+                                </td>
+                                <td>
+                                    @author.FullName
+                                </td>
+                                <td>
+                                    <a data-toggle="modal" data-target="#editBookCategoryModal-@author.Id"
+                                       class="btn btn-warning btn-xs">ویرایش</a>
+                                    <a asp-controller="BookCategory" asp-action="DeleteBookCategory"
+                                       asp-route-bookCategoryId="@author.Id" ajax-url-button="@author.Id"
+                                       class="btn btn-danger btn-xs">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <Alert type="warning" message="هیچ اطلاعاتی یافت نشد"></Alert>
+        }
+        <div class="footer">
+            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>
+
+<!-- start Add Book Category Modal -->
+
+<div class="modal fade" id="addBookCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">افزودن دسته بندی</h5>
+                <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <form asp-controller="BookCategory" asp-action="AddBookCategory" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+
+
+
+                        @* <partial name="_AddBookCategory" model="@(new AddBookCategoryDTO { })" /> *@
+                        <div class="custome-modal-footer">
+                            <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end Add Book Category Modal -->
+@if (Model.Authors != null && Model.Authors.Any())
+{
+    @foreach (var author in Model.Authors)
+    {
+        <!-- Start Edit Book Category Modal -->
+
+        <div class="modal fade" id="editBookCategoryModal-@author.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش دسته بندی</h5>
+                        <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <form asp-controller="BookCategory" asp-action="EditBookCategory" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                @* <partial name="_EditBookCategory" model="@(new EditBookCategoryDTO { Id = bookCategory.Id, Title = bookCategory.Title })" /> *@
+                                <div class="custome-modal-footer">
+                                    <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- End Edit Book Category Modal -->
+    }
+}
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,6 +1,4 @@
 ﻿using Application.DTOs.BookCategory;
-using Application.DTOs.User;
-using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
