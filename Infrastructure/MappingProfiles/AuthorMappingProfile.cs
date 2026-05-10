@@ -11,6 +11,8 @@ namespace Infrastructure.MappingProfiles
             CreateMap<Author, AuthorListItemDTO>();
 
             CreateMap<AddAuthorDTO, Author>();
+
+            CreateMap<EditAuthorDTO, Author>();
         }
     }
 }

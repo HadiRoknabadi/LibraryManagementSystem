@@ -1,0 +1,21 @@
+﻿@model Application.DTOs.Author.EditAuthorDTO
+
+<input type="hidden" asp-for="Id"/>
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>نام نویسنده</label>
+            <input asp-for="Name" class="form-control" placeholder="لطفا نام نویسنده را وارد کنید">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>نام خانوادگی نویسنده</label>
+            <input asp-for="Family" class="form-control" placeholder="لطفا نام خانوادگی نویسنده را وارد کنید">
+            <span asp-validation-for="Family" class="text-danger"></span>
+        </div>
+    </div>
+</div>

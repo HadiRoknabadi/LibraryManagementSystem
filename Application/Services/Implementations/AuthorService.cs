@@ -71,6 +71,11 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<Author> GetAuthorByIdAsync(int authorId)
+        {
+            return await _context.Authors.AsQueryable().SingleOrDefaultAsync(a => a.Id == authorId);
+        }
+
         public async Task<ResultDTO<AddAuthorResult>> AddAuthorAsync(AddAuthorDTO addAuthorDTO)
         {
             var result = new ResultDTO<AddAuthorResult>
@@ -83,6 +88,31 @@ namespace Application.Services.Implementations
             var author = _mapper.Map<AddAuthorDTO, Author>(addAuthorDTO);
 
             await _context.Authors.AddAsync(author);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<ResultDTO<EditAuthorResult>> EditAuthorAsync(EditAuthorDTO editAuthorDTO)
+        {
+            var result = new ResultDTO<EditAuthorResult>
+            {
+                Status = EditAuthorResult.Success,
+                Message = "نویسنده با موفقیت ویرایش شد"
+            };
+
+            var author = await GetAuthorByIdAsync(editAuthorDTO.Id);
+
+            if (author == null)
+            {
+                result.Status = EditAuthorResult.NotFound;
+                result.Message = "نویسنده یافت نشد";
+
+                return result;
+            }
+
+            var editedBookCategory = _mapper.Map<EditAuthorDTO, Author>(editAuthorDTO, author);
 
             await _context.SaveChangesAsync();
 

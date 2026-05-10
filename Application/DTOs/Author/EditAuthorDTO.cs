@@ -2,15 +2,16 @@
 
 namespace Application.DTOs.Author
 {
-    public class AddAuthorDTO
+    public class EditAuthorDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }
     }
 
-    public class AddAuthorDTOValidator:AbstractValidator<AddAuthorDTO>
+    public class EditAuthorDTOValidator: AbstractValidator<EditAuthorDTO>
     {
-        public AddAuthorDTOValidator()
+        public EditAuthorDTOValidator()
         {
             RuleFor(b => b.Name).NotEmpty().WithMessage("لطفا نام نویسنده را وارد کنید")
                 .MaximumLength(200).WithMessage("نام نویسنده نمیتواند بیشتر از 200 کاراکتر باشد");
@@ -20,8 +21,11 @@ namespace Application.DTOs.Author
         }
     }
 
-    public enum AddAuthorResult
+    public enum EditAuthorResult
     {
-        Success
+        Success,
+        NotFound
     }
+
+
 }
