@@ -47,8 +47,11 @@ namespace Application.Services.Implementations
 
             #region Filter
 
-            if (!string.IsNullOrEmpty(filter.FullName))
-                query = query.Where(u => EF.Functions.Like(u.FullName, $"%{filter.FullName}%"));
+            if (!string.IsNullOrEmpty(filter.Name))
+                query = query.Where(u => EF.Functions.Like(u.Name, $"%{filter.Name}%"));
+
+            if (!string.IsNullOrEmpty(filter.Family))
+                query = query.Where(u => EF.Functions.Like(u.Family, $"%{filter.Family}%"));
 
             #endregion
 

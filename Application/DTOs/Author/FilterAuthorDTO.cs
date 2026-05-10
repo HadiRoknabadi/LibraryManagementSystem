@@ -7,7 +7,8 @@ namespace Application.DTOs.Author
     {
         #region Properties
 
-        public string FullName { get; set; }
+        public string Name { get; set; }
+        public string Family { get; set; }
         public FilterDataOrder OrderBy { get; set; }
         public List<AuthorListItemDTO> Authors { get; set; }
 
