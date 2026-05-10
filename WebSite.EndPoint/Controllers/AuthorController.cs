@@ -36,7 +36,7 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
-        #region Add Book Category
+        #region Add Author
 
         [Route("AddAuthor")]
         [HttpPost]
@@ -68,7 +68,7 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
-        #region Edit Book Category
+        #region Edit Author
 
         [Route("EditAuthor")]
         [HttpPost]
@@ -103,6 +103,29 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Delete Author
+
+        [Route("DeleteAuthor/{authorId}")]
+        public async Task<IActionResult> DeleteAuthor(int authorId)
+        {
+            var result = await _authorService.DeleteAuthorAsync(authorId);
+            switch (result.Status)
+            {
+                case DeleteAuthorResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeleteAuthorResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+
+        }
+
+        #endregion
 
 
     }

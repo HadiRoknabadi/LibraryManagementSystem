@@ -79,8 +79,8 @@
                                 <td>
                                     <a data-toggle="modal" data-target="#editAuthorModal-@author.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
-                                    <a asp-controller="BookCategory" asp-action="DeleteBookCategory"
-                                       asp-route-bookCategoryId="@author.Id" ajax-url-button="@author.Id"
+                                    <a asp-controller="Author" asp-action="DeleteAuthor"
+                                       asp-route-authorId="@author.Id" ajax-url-button="@author.Id"
                                        class="btn btn-danger btn-xs">حذف</a>
                                 </td>
                             </tr>

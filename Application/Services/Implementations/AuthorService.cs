@@ -119,6 +119,32 @@ namespace Application.Services.Implementations
             return result;
         }
 
+        public async Task<ResultDTO<DeleteAuthorResult>> DeleteAuthorAsync(int authorId)
+        {
+            var result = new ResultDTO<DeleteAuthorResult>
+            {
+                Status = DeleteAuthorResult.Success,
+                Message = "نویسنده با موفقیت حذف شد"
+            };
+
+            var author = await GetAuthorByIdAsync(authorId);
+
+            if (author == null)
+            {
+                result.Status = DeleteAuthorResult.NotFound;
+                result.Message = "نویسنده یافت نشد";
+
+                return result;
+            }
+
+            author.IsDelete = true;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+
 
     }
 }
