@@ -10,5 +10,6 @@ namespace Application.Services.Interfaces
         Task<Publisher> GetPublisherByIdAsync(int publisherId);
         Task<ResultDTO<AddPublisherResult>> AddPublisherAsync(AddPublisherDTO addPublisherDTO);
         Task<ResultDTO<EditPublisherResult>> EditPublisherAsync(EditPublisherDTO editPublisherDTO);
+        Task<ResultDTO<DeletePublisherResult>> DeletePublisherAsync(int publisherId);
     }
 }

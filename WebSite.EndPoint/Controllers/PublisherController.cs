@@ -1,7 +1,4 @@
-﻿using Application.DTOs.Author;
-using Application.DTOs.BookCategory;
-using Application.DTOs.Publisher;
-using Application.Services.Implementations;
+﻿using Application.DTOs.Publisher;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -106,7 +103,29 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Delete Publisher
 
+        [Route("DeletePublisher/{publisherId}")]
+        public async Task<IActionResult> DeletePublisher(int publisherId)
+        {
+            var result = await _publisherService.DeletePublisherAsync(publisherId);
+            switch (result.Status)
+            {
+                case DeletePublisherResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeletePublisherResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+
+        }
+
+        #endregion
 
 
     }

@@ -118,6 +118,32 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<DeletePublisherResult>> DeletePublisherAsync(int publisherId)
+        {
+            var result = new ResultDTO<DeletePublisherResult>
+            {
+                Status=DeletePublisherResult.Success,
+                Message="ناشر با موفقیت حذف شد"
+            };
+
+            var publisher=await GetPublisherByIdAsync(publisherId);
+
+            if(publisher==null)
+            {
+                result.Status = DeletePublisherResult.NotFound;
+                result.Message = "ناشری یافت نشد";
+
+                return result;
+            }
+
+            publisher.IsDelete=true;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
 
     }
 }
