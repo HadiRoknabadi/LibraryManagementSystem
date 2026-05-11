@@ -69,6 +69,12 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<Publisher> GetPublisherByIdAsync(int publisherId)
+        {
+            return await _context.Publishers.AsQueryable().SingleOrDefaultAsync(p => p.Id == publisherId);
+        }
+
+
         public async Task<ResultDTO<AddPublisherResult>> AddPublisherAsync(AddPublisherDTO addPublisherDTO)
         {
             var result = new ResultDTO<AddPublisherResult>
@@ -84,6 +90,32 @@ namespace Application.Services.Implementations
             await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public async Task<ResultDTO<EditPublisherResult>> EditPublisherAsync(EditPublisherDTO editPublisherDTO)
+        {
+            var result = new ResultDTO<EditPublisherResult>
+            {
+                Status = EditPublisherResult.Success,
+                Message = "ناشر با موفقیت ویراش شد"
+            };
+
+            var publisher = await GetPublisherByIdAsync(editPublisherDTO.Id);
+
+            if(publisher==null)
+            {
+                result.Status = EditPublisherResult.NotFound;
+                result.Message = "ناشر یافت نشد";
+
+                return result;
+            }
+
+            var editedPublisher = _mapper.Map<EditPublisherDTO, Publisher>(editPublisherDTO, publisher);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.BookCategory;
+﻿using Application.DTOs.Author;
+using Application.DTOs.BookCategory;
 using Application.DTOs.Publisher;
 using Application.Services.Implementations;
 using Application.Services.Interfaces;
@@ -69,6 +70,43 @@ namespace WebSite.EndPoint.Controllers
         }
 
         #endregion
+
+        #region Edit Publisher
+
+        [Route("EditPublisher")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPublisher(EditPublisherDTO editPublisherDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _publisherService.EditPublisherAsync(editPublisherDTO);
+
+                switch (result.Status)
+                {
+                    case EditPublisherResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    case EditPublisherResult.NotFound:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+
+        }
+
+        #endregion
+
+
 
 
     }

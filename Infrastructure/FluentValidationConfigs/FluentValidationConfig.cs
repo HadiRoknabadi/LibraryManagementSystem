@@ -49,6 +49,7 @@ namespace Infrastructure.FluentValidationConfigs
             #region Publisher
 
             services.AddScoped<IValidator<AddPublisherDTO>, AddPublisherDTOValidator>();
+            services.AddScoped<IValidator<EditPublisherDTO>, EditPublisherDTOValidator>();
 
 
             #endregion

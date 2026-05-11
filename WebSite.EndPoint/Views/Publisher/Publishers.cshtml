@@ -83,7 +83,7 @@
                                     @publisher.PhoneNumber
                                 </td>
                                 <td>
-                                    <a asp-controller="Publisher" asp-action="EditPublisher" asp-route-publisherId="@publisher.Id"
+                                    <a data-toggle="modal" data-target="#editPublisherModal-@publisher.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
                                     <a asp-controller="Publisher" asp-action="DeletePublisher"
                                        asp-route-publisherId="@publisher.Id" ajax-url-button="@publisher.Id"
@@ -140,6 +140,47 @@
     </div>
 </div>
 <!-- end Add Publisher Modal -->
+@if (Model.Publishers != null && Model.Publishers.Any())
+{
+    @foreach (var publisher in Model.Publishers)
+    {
+        <!-- Start Add Publisher Modal -->
+
+
+        <div class="modal fade" id="editPublisherModal-@publisher.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش ناشر</h5>
+                        <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <form asp-controller="Publisher" asp-action="EditPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                <partial name="_EditPublisher" model="@(new EditPublisherDTO { Id = publisher.Id, Name = publisher.Name, PhoneNumber = publisher.PhoneNumber,Address=publisher.Address })" />
+                                <div class="custome-modal-footer">
+                                    <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- End Add Publisher Modal -->
+    }
+}
+
+
 @section Scripts
 {
     @{
