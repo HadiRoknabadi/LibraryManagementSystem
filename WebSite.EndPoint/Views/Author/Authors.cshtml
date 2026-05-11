@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<!-- start Add Book Category Modal -->
+<!-- start Add Author Modal -->
 
 <div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -133,12 +133,12 @@
         </div>
     </div>
 </div>
-<!-- end Add Book Category Modal -->
+<!-- end Add Author Modal -->
 @if (Model.Authors != null && Model.Authors.Any())
 {
     @foreach (var author in Model.Authors)
     {
-        <!-- Start Edit Book Category Modal -->
+        <!-- Start Edit Author Modal -->
 
         <div class="modal fade" id="editAuthorModal-@author.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -169,7 +169,7 @@
             </div>
         </div>
 
-        <!-- End Edit Book Category Modal -->
+        <!-- End Edit Author Modal -->
     }
 }
 

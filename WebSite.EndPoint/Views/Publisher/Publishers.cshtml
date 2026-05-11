@@ -1,0 +1,110 @@
+﻿@model Application.DTOs.Publisher.FilterPublisherDTO
+
+
+@{
+    ViewData["Title"] = "ناشرها";
+}
+
+<div class="container margin-bottom-10">
+    <a asp-controller="Publisher" asp-action="AddPublisher" class="btn btn-success">افزودن ناشر</a>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+    <div class="well with-header">
+        <div class="header bordered-sky">
+            فیلتر
+        </div>
+        <form id="filter-form" asp-controller="User" asp-action="Users" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="form-group">
+                <label>نام ناشر</label>
+                <input asp-for="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>شماره تلفن</label>
+                <input asp-for="PhoneNumber" class="form-control">
+            </div>
+            <hr />
+            <h4>مرتب سازی</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterDataOrder>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.OrderBy)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.OrderBy) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-success btn-block">فیلتر</button>
+        </form>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-8 col-sm-12 col-12 col-xs-12">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        @if (Model.Publishers != null && Model.Publishers.Any())
+        {
+            <div class="table-scrollable">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                نام ناشر
+                            </th>
+                            <th>
+                                ش
+                            </th>
+                            <th>
+                                شماره موبایل
+                            </th>
+                            <th>
+                                دستورات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var publisher in Model.Publishers)
+                        {
+                            <tr id="ajax-url-item-@publisher.Id">
+                                <td>
+                                    @publisher.Id
+                                </td>
+                                <td>
+                                    @publisher.Name
+                                </td>
+                                <td>
+                                    @publisher.PhoneNumber
+                                </td>
+                                <td>
+                                    <a asp-controller="Publisher" asp-action="EditPublisher" asp-route-publisherId="@publisher.Id"
+                                       class="btn btn-warning btn-xs">ویرایش</a>
+                                    <a asp-controller="Publisher" asp-action="DeletePublisher"
+                                       asp-route-publisherId="@publisher.Id" ajax-url-button="@publisher.Id"
+                                       class="btn btn-danger btn-xs">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <Alert type="warning" message="هیچ اطلاعاتی یافت نشد"></Alert>
+        }
+        <div class="footer">
+            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>
