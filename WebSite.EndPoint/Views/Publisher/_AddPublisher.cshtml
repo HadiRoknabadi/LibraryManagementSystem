@@ -1,0 +1,26 @@
+﻿@model Application.DTOs.Publisher.AddPublisherDTO
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>نام ناشر</label>
+            <input asp-for="Name" class="form-control" placeholder="لطفا نام ناشر را وارد کنید">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>شماره تلفن</label>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="لطفا شماره تلفن را وارد کنید">
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>آدرس</label>
+            <input asp-for="Address" class="form-control" placeholder="لطفاآدرس را وارد کنید">
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+    </div>
+</div>

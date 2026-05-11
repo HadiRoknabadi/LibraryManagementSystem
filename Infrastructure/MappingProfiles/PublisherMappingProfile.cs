@@ -9,6 +9,7 @@ namespace Infrastructure.MappingProfiles
         public PublisherMappingProfile()
         {
             CreateMap<Publisher, PublisherListItemDTO>();
+            CreateMap<AddPublisherDTO, Publisher>();
         }
     }
 }

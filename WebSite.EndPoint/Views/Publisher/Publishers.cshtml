@@ -1,15 +1,15 @@
-﻿@model Application.DTOs.Publisher.FilterPublisherDTO
-
+﻿@model FilterPublisherDTO
+@using Application.DTOs.Publisher
 
 @{
     ViewData["Title"] = "ناشرها";
 }
 
 <div class="container margin-bottom-10">
-    <a asp-controller="Publisher" asp-action="AddPublisher" class="btn btn-success">افزودن ناشر</a>
+    <a data-toggle="modal" data-target="#addPublisherModal" class="btn btn-success">افزودن ناشر</a>
 </div>
 
-<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12addPublisherModal ">
     <div class="well with-header">
         <div class="header bordered-sky">
             فیلتر
@@ -62,9 +62,6 @@
                                 نام ناشر
                             </th>
                             <th>
-                                ش
-                            </th>
-                            <th>
                                 شماره موبایل
                             </th>
                             <th>
@@ -108,3 +105,45 @@
         </div>
     </div>
 </div>
+
+<!-- start Add Publisher Modal -->
+
+<div class="modal fade" id="addPublisherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">افزودن ناشر</h5>
+                <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <form asp-controller="Publisher" asp-action="AddPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+
+
+
+                        <partial name="_AddPublisher" model="@(new AddPublisherDTO { })" />
+                        <div class="custome-modal-footer">
+                            <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end Add Publisher Modal -->
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

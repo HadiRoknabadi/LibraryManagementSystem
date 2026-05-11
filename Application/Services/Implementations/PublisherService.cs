@@ -68,5 +68,24 @@ namespace Application.Services.Implementations
 
             return filter.SetPaging(pager).SetData(allEntities);
         }
+
+        public async Task<ResultDTO<AddPublisherResult>> AddPublisherAsync(AddPublisherDTO addPublisherDTO)
+        {
+            var result = new ResultDTO<AddPublisherResult>
+            {
+                Status=AddPublisherResult.Success,
+                Message="ناشر با موفقیت اضافه شد"
+            };
+
+            var publisher = _mapper.Map<AddPublisherDTO, Publisher>(addPublisherDTO);
+
+            await _context.Publishers.AddAsync(publisher);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+
     }
 }

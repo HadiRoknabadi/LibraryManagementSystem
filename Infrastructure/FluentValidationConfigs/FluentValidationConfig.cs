@@ -1,7 +1,9 @@
 ﻿using Application.DTOs.Account;
 using Application.DTOs.Author;
 using Application.DTOs.BookCategory;
+using Application.DTOs.Publisher;
 using Application.DTOs.User;
+using Domain.Entities.Book;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,13 @@ namespace Infrastructure.FluentValidationConfigs
 
             services.AddScoped<IValidator<AddAuthorDTO>, AddAuthorDTOValidator>();
             services.AddScoped<IValidator<EditAuthorDTO>, EditAuthorDTOValidator>();
+
+
+            #endregion
+
+            #region Publisher
+
+            services.AddScoped<IValidator<AddPublisherDTO>, AddPublisherDTOValidator>();
 
 
             #endregion
