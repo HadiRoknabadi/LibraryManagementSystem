@@ -1,7 +1,9 @@
-﻿using Application.DTOs.Book;
+﻿using Application.DTOs.Author;
+using Application.DTOs.Book;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebSite.EndPoint.Http;
 
 namespace WebSite.EndPoint.Controllers
 {
@@ -164,6 +166,30 @@ namespace WebSite.EndPoint.Controllers
             }
 
             return View(editBookDTO);
+        }
+
+        #endregion
+
+        #region Delete Book
+
+        [Route("DeleteBook/{bookId}")]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            var result = await _bookService.DeleteBookAsync(bookId);
+            switch (result.Status)
+            {
+                case DeleteBookResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeleteBookResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+
         }
 
         #endregion

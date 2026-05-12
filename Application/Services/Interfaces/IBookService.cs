@@ -11,5 +11,6 @@ namespace Application.Services.Interfaces
         Task<ResultDTO<AddBookResult>> AddBookAsync(AddBookDTO addBookDTO);
         Task<ResultDTO<GetBookDetailsResult,EditBookDTO>> GetBookDetailsForEditAsync(int bookId);
         Task<ResultDTO<EditBookResult>> EditBookAsync(EditBookDTO editBookDTO);
+        Task<ResultDTO<DeleteBookResult>> DeleteBookAsync(int bookId);
     }
 }
