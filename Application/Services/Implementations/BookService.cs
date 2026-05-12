@@ -69,6 +69,40 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<Book> GetBookByIdAsync(int bookId)
+        {
+            return await _context.Books
+                .Include(b=>b.BookAuthors)
+                .AsQueryable()
+                .SingleOrDefaultAsync(b => b.Id == bookId);
+        }
+
+        public async Task<ResultDTO<GetBookDetailsResult, EditBookDTO>> GetBookDetailsForEditAsync(int bookId)
+        {
+            var result = new ResultDTO<GetBookDetailsResult, EditBookDTO>
+            {
+                Status=GetBookDetailsResult.Success,
+                Message="اطلاعات با موفقیت دریافت شد",
+                Data=null
+            };
+
+            var book = await GetBookByIdAsync(bookId);
+
+            if(book==null)
+            {
+                result.Status = GetBookDetailsResult.NotFound;
+                result.Message = "کتابی یافت نشد";
+
+                return result;
+            }
+
+            result.Data=_mapper.Map<Book,EditBookDTO>(book);
+
+            return result;
+
+        }
+
+
         public async Task<ResultDTO<AddBookResult>> AddBookAsync(AddBookDTO addBookDTO)
         {
             var result = new ResultDTO<AddBookResult>
@@ -93,6 +127,51 @@ namespace Application.Services.Implementations
 
 
         }
+
+        public async Task<ResultDTO<EditBookResult>> EditBookAsync(EditBookDTO editBookDTO)
+        {
+            var result = new ResultDTO<EditBookResult>
+            {
+                Status=EditBookResult.Success,
+                Message="کتاب با موفقیت ویرایش شد"
+            };
+
+            var book = await GetBookByIdAsync(editBookDTO.Id);
+
+            if(book== null)
+            {
+                result.Status = EditBookResult.NotFound;
+                result.Message = "کتابی یافت نشد";
+
+                return result;
+            }
+
+            var editedBook = _mapper.Map<EditBookDTO, Book>(editBookDTO,book);
+
+            //Remove Authors
+
+            foreach (var item in editedBook.BookAuthors)
+            {
+                item.IsDelete = true;
+            }
+
+            //Add New Authors
+
+            foreach (var authorId in editBookDTO.AuthorIds.Distinct())
+            {
+                book.BookAuthors.Add(new BookAuthor
+                {
+                    AuthorId = authorId,
+                    BookId = book.Id
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
 
 
     }

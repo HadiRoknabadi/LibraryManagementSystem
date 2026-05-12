@@ -1,0 +1,103 @@
+﻿@model Application.DTOs.Book.EditBookDTO
+@using Application.DTOs.BookCategory
+@using Application.DTOs.Publisher
+@using Application.DTOs.Author
+
+@{
+    ViewData["Title"] = "ویرایش کتاب";
+
+    var categories = ViewData["Categories"] as List<BookCategoryListItemDTO>;
+    var publishers = ViewData["Publishers"] as List<PublisherListItemDTO>;
+    var authors = ViewData["Authors"] as List<AuthorListItemDTO>;
+}
+
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget">
+        <div class="widget-header bordered-bottom bordered-blue">
+            <span class="widget-caption">@ViewData["Title"]</span>
+        </div>
+        <div class="widget-body">
+            <div>
+                <form id="editBookFrm" asp-controller="Book" asp-action="EditBook"
+                      enctype="multipart/form-data">
+                      <input type="hidden" asp-for="Id"/>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>نام کتاب</label>
+                                <input asp-for="Title" class="form-control">
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>ISBN</label>
+                                <input asp-for="ISBN" class="form-control">
+                                <span asp-validation-for="ISBN" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>دسته بندی</label>
+                                <select asp-for="CategoryId" asp-items="@(new SelectList(categories, "Id", "Title"))"
+                                        class="form-control">
+                                    <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>ناشر</label>
+                                <select asp-for="PublisherId" asp-items="@(new SelectList(publishers, "Id", "Name"))"
+                                        class="form-control">
+                                    <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+                                </select>
+                                <span asp-validation-for="PublisherId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>نویسندگان</label>
+                                <select multiple asp-for="AuthorIds" asp-items="@(new SelectList(authors, "Id", "FullName"))"
+                                        class="form-control">
+                                    <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+                                </select>
+                                <span asp-validation-for="AuthorIds" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="editBookBtn" class="btn btn-success">ثبت اطلاعات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $("#editBookBtn").on('click', function () {
+
+
+              var categoryId = $("#CategoryId").val();
+              var publisherId = $("#PublisherId").val();
+
+              if (categoryId == 0) {
+                  ShowToastMessageNotification('خطا', 'لطفا دسته بندی را برای کتاب انتخاب کنید', 'warning');
+                  return false;
+              }
+
+              if (publisherId == 0) {
+                  ShowToastMessageNotification('خطا', 'لطفا ناشر را برای کتاب انتخاب کنید', 'warning');
+                  return false;
+              }
+
+              $('#editBookFrm').submit();
+          });
+    </script>
+
+}

@@ -102,5 +102,72 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Edit Book
+
+        [Route("EditBook/{bookId}")]
+        public async Task<IActionResult> EditBook(int bookId)
+        {
+            var result=await _bookService.GetBookDetailsForEditAsync(bookId);
+
+            switch (result.Status)
+            {
+                case GetBookDetailsResult.Success:
+
+                    #region Fill Select Lists
+
+                    var categories = await _bookCategoryService.GetAllBookCategoriesAsync();
+
+                    var authors = await _authorService.GetAllAuthorsAsync();
+
+                    var publishers = await _publisherService.GetPublishersAsync();
+
+                    ViewData["Categories"] = categories.Data;
+                    ViewData["Authors"] = authors.Data;
+                    ViewData["Publishers"] = publishers.Data;
+
+                    #endregion
+
+                    return View(result.Data);
+
+                case GetBookDetailsResult.NotFound:
+                    TempData[Toast_WarningMessage]=result.Message;
+                    return RedirectToAction(nameof(Books));
+
+                default:
+                    TempData[Toast_ErrorMessage] = "عملیات با خطا مواجه شد";
+                    return RedirectToAction(nameof(Books));
+            }
+        }
+
+        [Route("EditBook/{bookId?}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBook(EditBookDTO editBookDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                var result=await _bookService.EditBookAsync(editBookDTO);
+
+                switch (result.Status)
+                {
+                    case EditBookResult.Success:
+
+                        TempData[Toast_SuccessMessage] = result.Message;
+                        return RedirectToAction(nameof(Books));
+
+                    case EditBookResult.NotFound:
+                        TempData[Toast_WarningMessage] = result.Message;
+                        break;
+
+
+                }
+            }
+
+            return View(editBookDTO);
+        }
+
+        #endregion
+
+
     }
 }
