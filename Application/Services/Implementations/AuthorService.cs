@@ -25,6 +25,31 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<ResultDTO<GetAuthorsResult, List<AuthorListItemDTO>>> GetAllAuthorsAsync()
+        {
+            var result = new ResultDTO<GetAuthorsResult, List<AuthorListItemDTO>>
+            {
+                Status=GetAuthorsResult.Success,
+                Message="اطلاعات با موفقیت دریافت شد",
+                Data= new List<AuthorListItemDTO>()
+            };
+
+            var authors = await _context.Authors.AsQueryable().ToListAsync();
+
+            if(authors==null)
+            {
+                result.Status = GetAuthorsResult.AuthorsEmpty;
+                result.Message = "نویسنده ای یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<Author>, List<AuthorListItemDTO>>(authors);
+
+            return result;
+        }
+
+
         public async Task<FilterAuthorDTO> FilterAuthorAsync(FilterAuthorDTO filter)
         {
             var query = _context.Authors.AsQueryable().AsNoTracking();

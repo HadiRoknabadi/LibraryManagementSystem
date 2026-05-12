@@ -24,6 +24,31 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<ResultDTO<GetPublishersResult, List<PublisherListItemDTO>>> GetPublishersAsync()
+        {
+            var result = new ResultDTO<GetPublishersResult, List<PublisherListItemDTO>>
+            {
+                Status=GetPublishersResult.Success,
+                Message="اطلاعات با موفقیت دریافت شد",
+                Data=new List<PublisherListItemDTO>()
+            };
+
+            var publishers = await _context.Publishers.AsQueryable().ToListAsync();
+
+            if(publishers==null)
+            {
+                result.Status = GetPublishersResult.PublishersEmpty;
+                result.Message = "ناشری یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<Publisher>, List<PublisherListItemDTO>>(publishers);
+
+            return result;
+        }
+
+
         public async Task<FilterPublisherDTO> FilterPublisherAsync(FilterPublisherDTO filter)
         {
             var query = _context.Publishers.AsQueryable().AsNoTracking();

@@ -12,5 +12,12 @@ namespace Domain.Entities.Book
 
         #endregion
 
+        #region Relations
+
+        public ICollection<BookAuthor> BookAuthors { get; set; }
+
+
+        #endregion
+
     }
 }

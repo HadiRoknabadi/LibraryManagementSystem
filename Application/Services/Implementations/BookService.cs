@@ -69,6 +69,30 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<ResultDTO<AddBookResult>> AddBookAsync(AddBookDTO addBookDTO)
+        {
+            var result = new ResultDTO<AddBookResult>
+            {
+                Status=AddBookResult.Success,
+                Message="کتاب با موفقیت اضافه شد"
+            };
+
+            var book = _mapper.Map<AddBookDTO, Book>(addBookDTO);
+
+            //Add Book Authors
+            book.BookAuthors = addBookDTO.AuthorIds.Select(authorId => new BookAuthor
+            {
+                AuthorId = authorId
+            }).ToList();
+
+            await _context.Books.AddAsync(book);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+
+        }
 
 
     }

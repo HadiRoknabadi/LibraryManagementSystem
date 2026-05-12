@@ -9,6 +9,8 @@ namespace Infrastructure.MappingProfiles
         public BookMappingProfile()
         {
             CreateMap<Book, BookListItemDTO>();
+
+            CreateMap<AddBookDTO, Book>();
         }
     }
 }

@@ -11,11 +11,20 @@ namespace WebSite.EndPoint.Controllers
         #region Constructor
 
         private readonly IBookService _bookService;
+        private readonly IBookCategoryService _bookCategoryService;
+        private readonly IAuthorService _authorService;
+        private readonly IPublisherService _publisherService;
 
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService, IBookCategoryService bookCategoryService, IAuthorService authorService, IPublisherService publisherService)
         {
             _bookService = bookService;
+            _bookCategoryService = bookCategoryService;
+            _authorService = authorService;
+            _publisherService = publisherService;
         }
+
+
+
 
         #endregion
 
@@ -33,5 +42,65 @@ namespace WebSite.EndPoint.Controllers
         }
 
         #endregion
+
+        #region Add Book
+
+        [Route("AddBook")]
+        public async Task<IActionResult> AddBook()
+        {
+            #region Fill Select Lists
+
+            var categories = await _bookCategoryService.GetAllBookCategoriesAsync();
+
+            var authors=await _authorService.GetAllAuthorsAsync();
+
+            var publishers=await _publisherService.GetPublishersAsync();
+
+            ViewData["Categories"] = categories.Data;
+            ViewData["Authors"] = authors.Data;
+            ViewData["Publishers"] = publishers.Data;
+
+            #endregion
+
+            return View();
+        }
+
+        [Route("AddBook")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBook(AddBookDTO addBookDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                var result=await _bookService.AddBookAsync(addBookDTO);
+
+                switch (result.Status)
+                {
+                    case AddBookResult.Success:
+
+                        TempData[Toast_SuccessMessage]=result.Message;
+                        return RedirectToAction(nameof(Books));
+                }
+            }
+
+            #region Fill Select Lists
+
+            var categories = await _bookCategoryService.GetAllBookCategoriesAsync();
+
+            var authors = await _authorService.GetAllAuthorsAsync();
+
+            var publishers = await _publisherService.GetPublishersAsync();
+
+            ViewData["Categories"] = categories.Data;
+            ViewData["Authors"] = authors.Data;
+            ViewData["Publishers"] = publishers.Data;
+
+            #endregion
+
+            return View(addBookDTO);
+        }
+
+        #endregion
+
     }
 }

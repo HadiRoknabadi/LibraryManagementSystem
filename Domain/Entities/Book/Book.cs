@@ -17,6 +17,7 @@ namespace Domain.Entities.Book
 
         public BookCategory Category { get; set; }
         public Publisher Publisher { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; }
 
         #endregion
 

@@ -25,6 +25,31 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<ResultDTO<GetBookCategoriesResult, List<BookCategoryListItemDTO>>> GetAllBookCategoriesAsync()
+        {
+            var result = new ResultDTO<GetBookCategoriesResult, List<BookCategoryListItemDTO>>
+            {
+                Status=GetBookCategoriesResult.Success,
+                Message="اطلاعات با موفقیت دریافت شدند",
+                Data=new List<BookCategoryListItemDTO>()
+            };
+
+            var categories=await _context.BookCategories.ToListAsync();
+
+            if(categories==null)
+            {
+                result.Status = GetBookCategoriesResult.CategoriesEmpty;
+                result.Message = "دسته بندی وجود ندارد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<BookCategory>, List<BookCategoryListItemDTO>>(categories);
+
+            return result;
+        }
+
+
         public async Task<FilterBookCategoryDTO> FilterBookCategoryAsync(FilterBookCategoryDTO filter)
         {
             var query = _context.BookCategories.AsQueryable().AsNoTracking();
