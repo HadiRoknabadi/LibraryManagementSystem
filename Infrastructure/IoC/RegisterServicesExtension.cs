@@ -17,6 +17,7 @@ namespace Infrastructures.IoC
             services.AddScoped<IAuthorService,AuthorService>();
             services.AddScoped<IPublisherService,PublisherService>();
             services.AddScoped<IBookService,BookService>();
+            services.AddScoped<IBookCopyService,BookCopyService>();
 
 
             return services;

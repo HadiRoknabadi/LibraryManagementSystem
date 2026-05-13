@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Author;
-using Application.DTOs.Book;
+﻿using Application.DTOs.Book;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

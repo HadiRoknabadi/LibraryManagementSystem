@@ -1,0 +1,211 @@
+﻿@model FilterBookCopyDTO
+@using Application.DTOs.BookCopy
+@using Domain.Entities.Book
+
+@{
+    ViewData["Title"] = "نسخه های کتاب";
+}
+
+<div class="container margin-bottom-10">
+    <a data-toggle="modal" data-target="#addPublisherModal" class="btn btn-success">ثبت نسخه جدید</a>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12addPublisherModal ">
+    <div class="well with-header">
+        <div class="header bordered-sky">
+            فیلتر
+        </div>
+        <form id="filter-form" asp-controller="BookCopy" asp-action="BookCopies" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="form-group">
+                <label>نام کتاب</label>
+                <input asp-for="BookName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>کد موجودی</label>
+                <input asp-for="InventoryCode" class="form-control">
+            </div>
+            <hr/>
+            <h4>وضعیت</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<BookCopyStatus>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.Status)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.Status) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <hr />
+            <h4>مرتب سازی</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterDataOrder>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.OrderBy)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.OrderBy) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-success btn-block">فیلتر</button>
+        </form>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-8 col-sm-12 col-12 col-xs-12">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        @if (Model.BookCopies != null && Model.BookCopies.Any())
+        {
+            <div class="table-scrollable">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                نام کتاب
+                            </th>
+                            <th>
+                                 کد موجودی
+                            </th>
+                            <th>
+                                 وضعیت
+                            </th>
+                            <th>
+                                دستورات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bookCopy in Model.BookCopies)
+                        {
+                            <tr id="ajax-url-item-@bookCopy.Id">
+                                <td>
+                                    @bookCopy.Id
+                                </td>
+                                <td>
+                                    @bookCopy.BookName
+                                </td>
+                                <td>
+                                    @bookCopy.InventoryCode
+                                </td>
+                                <td>
+                                    @bookCopy.Status
+                                </td>
+                                <td>
+                                    <a data-toggle="modal" data-target="#editPublisherModal-@bookCopy.Id"
+                                       class="btn btn-warning btn-xs">ویرایش</a>
+                                    <a asp-controller="Publisher" asp-action="DeletePublisher"
+                                       asp-route-publisherId="@bookCopy.Id" ajax-url-button="@bookCopy.Id"
+                                       class="btn btn-danger btn-xs">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <Alert type="warning" message="هیچ اطلاعاتی یافت نشد"></Alert>
+        }
+        <div class="footer">
+            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>
+
+<!-- start Add Publisher Modal -->
+
+<div class="modal fade" id="addPublisherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">افزودن ناشر</h5>
+                <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <form asp-controller="Publisher" asp-action="AddPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+
+
+
+                        @* <partial name="_AddPublisher" model="@(new AddPublisherDTO { })" /> *@
+                        <div class="custome-modal-footer">
+                            <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end Add Publisher Modal -->
+@if (Model.BookCopies != null && Model.BookCopies.Any())
+{
+    @foreach (var publisher in Model.BookCopies)
+    {
+        <!-- Start Add Publisher Modal -->
+
+
+        <div class="modal fade" id="editPublisherModal-@publisher.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش ناشر</h5>
+                        <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <form asp-controller="Publisher" asp-action="EditPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                @* <partial name="_EditPublisher" model="@(new EditPublisherDTO { Id = publisher.Id, Name = publisher.Name, PhoneNumber = publisher.PhoneNumber, Address = publisher.Address })" /> *@
+                                <div class="custome-modal-footer">
+                                    <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- End Add Publisher Modal -->
+    }
+}
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

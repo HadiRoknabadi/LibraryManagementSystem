@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Book
 {
@@ -24,9 +25,16 @@ namespace Domain.Entities.Book
 
     public enum BookCopyStatus
     {
+        [Display(Name ="موجود")]
         Available,
+
+        [Display(Name = "در امانت")]
         Borrowed,
+
+        [Display(Name = "مفقود")]
         Lost,
+
+        [Display(Name = "معیوب")]
         Damaged
     }
 }
