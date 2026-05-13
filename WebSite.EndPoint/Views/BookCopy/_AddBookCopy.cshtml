@@ -1,0 +1,22 @@
+﻿@model Application.DTOs.BookCopy.AddBookCopyDTO
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>کتاب</label>
+            <select asp-for="BookId" asp-items="@(new SelectList(Model.Books, "Id", "Title"))"
+                    class="form-control">
+                <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+            </select>
+            <span asp-validation-for="BookId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>آدرس</label>
+            <textarea asp-for="ShelfLocation" class="form-control" placeholder="لطفا موقعیت قفسه را وارد کنید"></textarea>
+            <span asp-validation-for="ShelfLocation" class="text-danger"></span>
+        </div>
+    </div>
+</div>

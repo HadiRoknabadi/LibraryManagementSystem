@@ -10,6 +10,8 @@ namespace Infrastructure.MappingProfiles
         {
             CreateMap<BookCopy, BookCopyListItemDTO>()
                 .ForMember(b=>b.BookName,m=>m.MapFrom(m=>m.Book.Title));
+
+            CreateMap<AddBookCopyDTO, BookCopy>();
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Application.Services.Interfaces
     public interface IBookService
     {
         Task<FilterBookDTO> FilterBookAsync(FilterBookDTO filter);
+        Task<ResultDTO<GetBooksResult, List<BookListItemDTO>>> GetAllBooksAsync();
         Task<Book> GetBookByIdAsync(int bookId);
         Task<ResultDTO<AddBookResult>> AddBookAsync(AddBookDTO addBookDTO);
         Task<ResultDTO<GetBookDetailsResult,EditBookDTO>> GetBookDetailsForEditAsync(int bookId);

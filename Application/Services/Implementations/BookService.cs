@@ -69,6 +69,32 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<ResultDTO<GetBooksResult, List<BookListItemDTO>>> GetAllBooksAsync()
+        {
+            var result = new ResultDTO<GetBooksResult, List<BookListItemDTO>>
+            {
+                Status=GetBooksResult.Success,
+                Message="اطلاعات با موفقیت دریافت شدند",
+                Data=new List<BookListItemDTO>()
+            };
+
+            var books = await _context.Books.AsQueryable().ToListAsync();
+
+            if(books==null)
+            {
+                result.Status=GetBooksResult.BooksEmpty;
+                result.Message = "کتابی یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<Book>,List<BookListItemDTO>>(books);
+
+            return result;
+
+        }
+
+
         public async Task<Book> GetBookByIdAsync(int bookId)
         {
             return await _context.Books

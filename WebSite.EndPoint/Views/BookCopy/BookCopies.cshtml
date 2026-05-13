@@ -1,13 +1,16 @@
 ﻿@model FilterBookCopyDTO
 @using Application.DTOs.BookCopy
+@using Application.DTOs.Book
 @using Domain.Entities.Book
 
 @{
     ViewData["Title"] = "نسخه های کتاب";
+
+    var books = ViewData["Books"] as List<BookListItemDTO>;
 }
 
 <div class="container margin-bottom-10">
-    <a data-toggle="modal" data-target="#addPublisherModal" class="btn btn-success">ثبت نسخه جدید</a>
+    <a data-toggle="modal" data-target="#addBookCopyModal" class="btn btn-success">ثبت نسخه جدید</a>
 </div>
 
 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12addPublisherModal ">
@@ -101,7 +104,25 @@
                                     @bookCopy.InventoryCode
                                 </td>
                                 <td>
-                                    @bookCopy.Status
+                                    @switch (bookCopy.Status)
+                                    {
+                                        case BookCopyStatus.Available:
+                                            <span class="label label-success">موجود</span>
+                                            break;
+
+                                        case BookCopyStatus.Lost:
+                                            <span class="label label-danger">مفقود</span>
+                                            break;
+
+                                        case BookCopyStatus.Borrowed:
+                                            <span class="label label-warning">در امانت</span>
+                                            break;
+
+                                        case BookCopyStatus.Damaged:
+                                            <span class="label label-danger">معیوب</span>
+                                            break;
+                                        
+                                    }
                                 </td>
                                 <td>
                                     <a data-toggle="modal" data-target="#editPublisherModal-@bookCopy.Id"
@@ -127,13 +148,13 @@
     </div>
 </div>
 
-<!-- start Add Publisher Modal -->
+<!-- start Add Book Copy Modal -->
 
-<div class="modal fade" id="addPublisherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addBookCopyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">افزودن ناشر</h5>
+                <h5 class="modal-title" id="exampleModalLabel">ثبت  نسخه جدید</h5>
                 <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -142,11 +163,11 @@
 
                 <div class="form-group">
 
-                    <form asp-controller="Publisher" asp-action="AddPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                    <form asp-controller="BookCopy" asp-action="AddBookCopy" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
 
 
 
-                        @* <partial name="_AddPublisher" model="@(new AddPublisherDTO { })" /> *@
+                        <partial name="_AddBookCopy" model="@(new AddBookCopyDTO {Books=books })" />
                         <div class="custome-modal-footer">
                             <button type="submit" class="btn btn-success pull-right">ثبت</button>
                             <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
@@ -160,7 +181,7 @@
         </div>
     </div>
 </div>
-<!-- end Add Publisher Modal -->
+<!-- end Add Book Copy Modal -->
 @if (Model.BookCopies != null && Model.BookCopies.Any())
 {
     @foreach (var publisher in Model.BookCopies)

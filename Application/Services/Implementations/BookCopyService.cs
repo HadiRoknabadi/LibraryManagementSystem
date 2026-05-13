@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.BookCopy;
 using Application.DTOs.Common;
 using Application.DTOs.Paging;
+using Application.Generators;
 using Application.Services.Interfaces;
 using Application.Services.Interfaces.Context;
 using AutoMapper;
@@ -27,7 +28,7 @@ namespace Application.Services.Implementations
         public async Task<FilterBookCopyDTO> FilterBookCopyAsync(FilterBookCopyDTO filter)
         {
             var query = _context.BookCopies
-                .Include(b=>b.Book)
+                .Include(b => b.Book)
                 .AsQueryable().AsNoTracking();
 
 
@@ -76,5 +77,32 @@ namespace Application.Services.Implementations
 
             return filter.SetPaging(pager).SetData(allEntities);
         }
+
+        public async Task<ResultDTO<AddBookCopyResult>> AddBookCopyAsync(AddBookCopyDTO addBookCopyDTO)
+        {
+            var result = new ResultDTO<AddBookCopyResult>
+            {
+                Status = AddBookCopyResult.Success,
+                Message = "نسخه با موفقیت اضافه شد"
+            };
+
+            var bookCopy = _mapper.Map<AddBookCopyDTO, BookCopy>(addBookCopyDTO);
+
+            var lastInventoryCode = await _context.BookCopies
+                .OrderByDescending(x => x.Id)
+                .Select(x => x.InventoryCode)
+                .FirstOrDefaultAsync();
+
+            bookCopy.InventoryCode=Generator.CreateBookCopyCode(lastInventoryCode);
+
+            await _context.BookCopies.AddAsync(bookCopy);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
+
     }
 }
