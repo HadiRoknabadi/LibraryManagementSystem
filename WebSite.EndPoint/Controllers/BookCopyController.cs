@@ -1,6 +1,4 @@
 ﻿using Application.DTOs.BookCopy;
-using Application.DTOs.Publisher;
-using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -81,7 +79,7 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
-        #region Edit Publisher
+        #region Edit Book Copy
 
         [Route("EditBookCopy")]
         [HttpPost]
@@ -111,6 +109,30 @@ namespace WebSite.EndPoint.Controllers
            .SelectMany(v => v.Errors)
            .Select(e => e.ErrorMessage));
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+
+        }
+
+        #endregion
+
+        #region Delete Book Copy
+
+        [Route("DeleteBookCopy/{bookCopyId}")]
+        public async Task<IActionResult> DeleteBookCopy(int bookCopyId)
+        {
+            var result = await _bookCopyService.DeleteBookCopyAsync(bookCopyId);
+            switch (result.Status)
+            {
+                case DeleteBookCopyResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeleteBookCopyResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
 
         }
 

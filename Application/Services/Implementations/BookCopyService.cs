@@ -136,6 +136,33 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<DeleteBookCopyResult>> DeleteBookCopyAsync(int bookCopyId)
+        {
+            var result = new ResultDTO<DeleteBookCopyResult>
+            {
+                Status=DeleteBookCopyResult.Success,
+                Message="نسخه با موفقیت حذف شد"
+            };
+
+            var bookCopy=await GetBookCopyByIdAsync(bookCopyId);
+
+            if(bookCopy == null)
+            {
+                result.Status=DeleteBookCopyResult.NotFound;
+                result.Message = "نسخه ای یافت نشد";
+
+                return result;
+            }
+
+            bookCopy.IsDelete = true;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
+
 
 
     }

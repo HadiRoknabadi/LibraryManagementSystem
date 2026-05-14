@@ -127,8 +127,8 @@
                                 <td>
                                     <a data-toggle="modal" data-target="#editBookCopyModal-@bookCopy.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
-                                    <a asp-controller="Publisher" asp-action="DeletePublisher"
-                                       asp-route-publisherId="@bookCopy.Id" ajax-url-button="@bookCopy.Id"
+                                    <a asp-controller="BookCopy" asp-action="DeleteBookCopy"
+                                       asp-route-bookCopyId="@bookCopy.Id" ajax-url-button="@bookCopy.Id"
                                        class="btn btn-danger btn-xs">حذف</a>
                                 </td>
                             </tr>
