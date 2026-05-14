@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.BookCopy;
+using Application.DTOs.Publisher;
+using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +64,41 @@ namespace WebSite.EndPoint.Controllers
                 {
                     case AddBookCopyResult.Success:
                         return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+
+        }
+
+        #endregion
+
+        #region Edit Publisher
+
+        [Route("EditBookCopy")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBookCopy(EditBookCopyDTO editBookCopyDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _bookCopyService.EditBookCopyAsync(editBookCopyDTO);
+
+                switch (result.Status)
+                {
+                    case EditBookCopyResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    case EditBookCopyResult.NotFound:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
 
                     default:
                         return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);

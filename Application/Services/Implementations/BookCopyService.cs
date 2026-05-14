@@ -25,6 +25,12 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<BookCopy> GetBookCopyByIdAsync(int bookCopyId)
+        {
+            return await _context.BookCopies.AsQueryable().SingleOrDefaultAsync(b => b.Id == bookCopyId);
+        }
+
+
         public async Task<FilterBookCopyDTO> FilterBookCopyAsync(FilterBookCopyDTO filter)
         {
             var query = _context.BookCopies
@@ -102,6 +108,34 @@ namespace Application.Services.Implementations
             return result;
 
         }
+
+        public async Task<ResultDTO<EditBookCopyResult>> EditBookCopyAsync(EditBookCopyDTO editBookCopyDTO)
+        {
+            var result = new ResultDTO<EditBookCopyResult>
+            {
+                Status= EditBookCopyResult.Success,
+                Message="نسخه با موفقیت ویرایش شد"
+            };
+
+            var bookCopy=await GetBookCopyByIdAsync(editBookCopyDTO.Id);
+
+            if(bookCopy==null)
+            {
+                result.Status = EditBookCopyResult.NotFound;
+                result.Message = "نسخه ای یافت نشد";
+
+                return result;
+            }
+
+            var editedBookCopy=_mapper.Map<EditBookCopyDTO,BookCopy>(editBookCopyDTO,bookCopy);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+
+        }
+
 
 
     }

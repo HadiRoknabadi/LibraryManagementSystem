@@ -2,6 +2,7 @@
 using Application.DTOs.Author;
 using Application.DTOs.Book;
 using Application.DTOs.BookCategory;
+using Application.DTOs.BookCopy;
 using Application.DTOs.Publisher;
 using Application.DTOs.User;
 using Domain.Entities.Book;
@@ -58,7 +59,15 @@ namespace Infrastructure.FluentValidationConfigs
             #region Book
 
             services.AddScoped<IValidator<AddBookDTO>, AddBookDTOValidator>();
+            services.AddScoped<IValidator<EditBookDTO>, EditBookDTOValidator>();
 
+
+            #endregion
+
+            #region Book Copy
+
+            services.AddScoped<IValidator<AddBookCopyDTO>, AddBookCopyDTOValidator>();
+            services.AddScoped<IValidator<EditBookCopyDTO>, EditBookCopyDTOValidator>();
 
             #endregion
 

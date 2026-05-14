@@ -5,6 +5,7 @@ namespace Application.DTOs.BookCopy
     public class BookCopyListItemDTO
     {
         public int Id { get; set; }
+        public int BookId { get; set; }
         public string BookName { get; set; }
         public string InventoryCode { get; set; }
         public string ShelfLocation { get; set; }

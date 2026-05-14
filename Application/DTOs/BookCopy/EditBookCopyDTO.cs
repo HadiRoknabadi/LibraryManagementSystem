@@ -3,17 +3,17 @@ using FluentValidation;
 
 namespace Application.DTOs.BookCopy
 {
-    public class AddBookCopyDTO
+    public class EditBookCopyDTO
     {
+        public int Id { get; set; }
         public int BookId { get; set; }
         public string ShelfLocation { get; set; }
         public List<BookListItemDTO> Books { get; set; }
-
     }
 
-    public class AddBookCopyDTOValidator:AbstractValidator<AddBookCopyDTO>
+    public class EditBookCopyDTOValidator:AbstractValidator<EditBookCopyDTO>
     {
-        public AddBookCopyDTOValidator()
+        public EditBookCopyDTOValidator()
         {
             RuleFor(b => b.ShelfLocation)
                 .MaximumLength(100)
@@ -22,8 +22,10 @@ namespace Application.DTOs.BookCopy
         }
     }
 
-    public enum AddBookCopyResult
+    public enum EditBookCopyResult
     {
-        Success
+        Success,
+        NotFound
     }
+
 }

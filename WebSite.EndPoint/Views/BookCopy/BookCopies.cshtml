@@ -125,7 +125,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <a data-toggle="modal" data-target="#editPublisherModal-@bookCopy.Id"
+                                    <a data-toggle="modal" data-target="#editBookCopyModal-@bookCopy.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
                                     <a asp-controller="Publisher" asp-action="DeletePublisher"
                                        asp-route-publisherId="@bookCopy.Id" ajax-url-button="@bookCopy.Id"
@@ -184,16 +184,16 @@
 <!-- end Add Book Copy Modal -->
 @if (Model.BookCopies != null && Model.BookCopies.Any())
 {
-    @foreach (var publisher in Model.BookCopies)
+    @foreach (var bookCopy in Model.BookCopies)
     {
-        <!-- Start Add Publisher Modal -->
+        <!-- Start Edit Book Copy Modal -->
 
 
-        <div class="modal fade" id="editPublisherModal-@publisher.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editBookCopyModal-@bookCopy.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">ویرایش ناشر</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش نسخه</h5>
                         <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -202,8 +202,8 @@
 
                         <div class="form-group">
 
-                            <form asp-controller="Publisher" asp-action="EditPublisher" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
-                                @* <partial name="_EditPublisher" model="@(new EditPublisherDTO { Id = publisher.Id, Name = publisher.Name, PhoneNumber = publisher.PhoneNumber, Address = publisher.Address })" /> *@
+                            <form asp-controller="BookCopy" asp-action="EditBookCopy" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                <partial name="_EditBookCopy" model="@(new EditBookCopyDTO { Id = bookCopy.Id,BookId=bookCopy.BookId,ShelfLocation = bookCopy.ShelfLocation, Books =books })" />
                                 <div class="custome-modal-footer">
                                     <button type="submit" class="btn btn-success pull-right">ثبت</button>
                                     <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
@@ -218,7 +218,7 @@
             </div>
         </div>
 
-        <!-- End Add Publisher Modal -->
+        <!-- End Edit Book Copy Modal -->
     }
 }
 
