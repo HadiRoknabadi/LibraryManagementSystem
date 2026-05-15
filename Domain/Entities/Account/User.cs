@@ -9,6 +9,7 @@ namespace Domain.Entities.Account
 
         public string Name { get; set; }
         public string Family { get; set; }
+        public string MembershipCode { get; set; }
         public string UserAvatar { get; set; }
         public bool IsDelete { get; set; }
         public DateTime CreateDate { get; set; }

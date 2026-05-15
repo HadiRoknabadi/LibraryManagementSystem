@@ -11,6 +11,7 @@ namespace Persistence.Configs.Account
             builder.Property(u => u.Name).IsRequired().HasMaxLength(200);
             builder.Property(u => u.Family).IsRequired().HasMaxLength(200);
             builder.Property(u => u.PhoneNumber).IsRequired().HasMaxLength(11);
+            builder.Property(u => u.MembershipCode).HasMaxLength(20);
             builder.Property(u => u.UserAvatar).HasMaxLength(100);
             builder.Ignore(u => u.FullName);
             builder.HasQueryFilter(u => u.IsDelete == false);
