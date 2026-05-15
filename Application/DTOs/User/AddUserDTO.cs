@@ -8,6 +8,7 @@ namespace Application.DTOs.User
         public string Name { get; set; }
         public string Family { get; set; }
         public string PhoneNumber { get; set; }
+        public string MembershipCode { get; set; }
         public string RoleName { get; set; }
         public string Password { get; set; }
         public IFormFile UserAvatarFile { get; set; }
@@ -28,6 +29,11 @@ namespace Application.DTOs.User
  .MinimumLength(11).WithMessage("شماره موبایل نمی تواند کمتر از 11 کاراکتر باشد")
     .MaximumLength(11).WithMessage("شماره موبایل نمی تواند بیشتر از 11 کاراکتر باشد")
     .Matches(@"^09(0[1-9]|1[0-9]|2[0-9]|3[0-9]|9[0-9]).{7}$").WithMessage("شماره موبایل وارد شده نامعتبر است");
+
+            RuleFor(u => u.MembershipCode)
+                .MaximumLength(20)
+                .WithName("کد عضویت")
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
             RuleFor(c => c.Password).NotEmpty().WithMessage("رمز عبور  را وارد کنید").MinimumLength(8)
                 .WithMessage("رمز عبور نمی تواند کمتر از 8 کاراکتر باشد")
