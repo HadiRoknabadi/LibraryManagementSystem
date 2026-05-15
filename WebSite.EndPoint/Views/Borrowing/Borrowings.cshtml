@@ -1,0 +1,210 @@
+﻿@model FilterBorrowingDTO
+@using Application.DTOs.Borrowing
+@using Domain.Entities.Book
+
+@{
+    ViewData["Title"] = "مدیریت امانت ها";
+}
+
+<div class="container margin-bottom-10">
+    <a data-toggle="modal" data-target="#submitBorrowBookModal" class="btn btn-success">ثبت امانت</a>
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12addPublisherModal ">
+    <div class="well with-header">
+        <div class="header bordered-sky">
+            فیلتر
+        </div>
+        <form id="filter-form" asp-controller="Borrowing" asp-action="Borrowings" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <hr />
+            <h4>وضعیت</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<BorrowingStatus>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.Status)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.Status) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <hr />
+            <h4>مرتب سازی</h4>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterDataOrder>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.OrderBy)"
+                                   @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.OrderBy) ? "checked" : "")>
+                            <span class="text">@item.Text</span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-success btn-block">فیلتر</button>
+        </form>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-8 col-sm-12 col-12 col-xs-12">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        @if (Model.Borrowings != null && Model.Borrowings.Any())
+        {
+            <div class="table-scrollable">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                نام کتاب
+                            </th>
+                            <th>
+                                وضعیت
+                            </th>
+                            <th>
+                                دستورات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var borrowing in Model.Borrowings)
+                        {
+                            <tr id="ajax-url-item-@borrowing.Id">
+                                <td>
+                                    @borrowing.Id
+                                </td>
+                                <td>
+                                    @borrowing.BookName
+                                </td>
+                                <td>
+                                    @switch (borrowing.Status)
+                                    {
+                                        case BorrowingStatus.Returned:
+                                            <span class="label label-success">بازگردانده شده</span>
+                                            break;
+
+                                        case BorrowingStatus.Late:
+                                            <span class="label label-danger">تاخیر در برگشت</span>
+                                            break;
+
+                                        case BorrowingStatus.Borrowed:
+                                            <span class="label label-warning">در امانت</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <a data-toggle="modal" data-target="#editBookCopyModal-@borrowing.Id"
+                                       class="btn btn-warning btn-xs">ویرایش</a>
+                                    <a asp-controller="BookCopy" asp-action="DeleteBookCopy"
+                                       asp-route-bookCopyId="@borrowing.Id" ajax-url-button="@borrowing.Id"
+                                       class="btn btn-danger btn-xs">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <Alert type="warning" message="هیچ اطلاعاتی یافت نشد"></Alert>
+        }
+        <div class="footer">
+            <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>
+
+<!-- start Subit Borrow Book Modal -->
+
+<div class="modal fade" id="submitBorrowBookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ثبت امانت</h5>
+                <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <form asp-controller="Borrowing" asp-action="SubmitBorrowBook" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+
+
+
+                        @* <partial name="_AddBookCopy" model="@(new AddBookCopyDTO { Books = books })" /> *@
+                        <div class="custome-modal-footer">
+                            <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end Subit Borrow Book Modal -->
+@if (Model.Borrowings != null && Model.Borrowings.Any())
+{
+    @foreach (var bookCopy in Model.Borrowings)
+    {
+        <!-- Start Edit Book Copy Modal -->
+
+
+        <div class="modal fade" id="editBookCopyModal-@bookCopy.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش نسخه</h5>
+                        <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <form asp-controller="BookCopy" asp-action="EditBookCopy" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                @* <partial name="_EditBookCopy" model="@(new EditBookCopyDTO { Id = bookCopy.Id, BookId = bookCopy.BookId, ShelfLocation = bookCopy.ShelfLocation, Books = books })" /> *@
+                                <div class="custome-modal-footer">
+                                    <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- End Edit Book Copy Modal -->
+    }
+}
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

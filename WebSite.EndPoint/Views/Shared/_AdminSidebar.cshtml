@@ -22,7 +22,7 @@
             </a>
         </li>
 
-        <li class="@(requestedPath == "/Books" || requestedPath=="/BookCopies" || requestedPath == "/BookCategories" || requestedPath == "/Authors" || requestedPath == "/Publishers" ? "active open" : "")">
+        <li class="@(requestedPath == "/Books" || requestedPath == "/BookCopies" || requestedPath == "/BookCategories" || requestedPath == "/Authors" || requestedPath == "/Publishers" || requestedPath == "/Borrowings" ? "active open" : "")">
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-book"></i>
                 <span class="menu-text"> مدیریت کتاب ها </span>
@@ -53,6 +53,11 @@
                 <li class="@(requestedPath == "/Publishers" ? "active" : "")">
                     <a asp-controller="Publisher" asp-action="Publishers">
                         <span class="menu-text">ناشرها</span>
+                    </a>
+                </li>
+                <li class="@(requestedPath == "/Borrowings" ? "active" : "")">
+                    <a asp-controller="Borrowing" asp-action="Borrowings">
+                        <span class="menu-text">مدیریت امانت ها</span>
                     </a>
                 </li>
             </ul>

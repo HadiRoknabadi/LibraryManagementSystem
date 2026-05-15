@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Account;
 using Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Book
 {
@@ -21,14 +22,20 @@ namespace Domain.Entities.Book
 
         public User User { get; set; }
         public User Librarian { get; set; }
+        public BookCopy BookCopy { get; set; }
 
         #endregion
     }
 
     public enum BorrowingStatus
     {
+        [Display(Name = "امانت داده شده")]
         Borrowed,
+
+        [Display(Name = "تحویل داده شده")]
         Returned,
+
+        [Display(Name = "دارای دیرکرد")]
         Late
     }
 }
