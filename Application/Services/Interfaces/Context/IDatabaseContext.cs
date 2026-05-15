@@ -15,6 +15,7 @@ namespace Application.Services.Interfaces.Context
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<BookAuthor> BookAuthors { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
+        public DbSet<Borrowing> Borrowings { get; set; }
 
         #endregion
 
