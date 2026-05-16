@@ -1,0 +1,32 @@
+﻿@model Application.DTOs.Borrowing.SubmitBorrowDTO
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>کاربر</label>
+            <select asp-for="UserId" asp-items="@(new SelectList(Model.Users, "Id", "FullName"))"
+                    class="form-control">
+                <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+            </select>
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>کتاب</label>
+            <select asp-for="BookCopyId" asp-items="@(new SelectList(Model.BookCopies, "Id", "BookName"))"
+                    class="form-control">
+                <option value="0">لطفا یک گزینه را انتخاب کنید</option>
+            </select>
+            <span asp-validation-for="BookCopyId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>تاریخ سر رسید</label>
+            <input asp-for="DueDate" class="form-control" placeholder="لطفا تاریخ سر رسید را وارد کنید" />
+            <span asp-validation-for="DueDate" class="text-danger"></span>
+        </div>
+    </div>
+</div>

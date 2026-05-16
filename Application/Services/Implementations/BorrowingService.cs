@@ -1,9 +1,9 @@
-﻿using Application.DTOs.BookCopy;
-using Application.DTOs.Borrowing;
+﻿using Application.DTOs.Borrowing;
 using Application.DTOs.Common;
 using Application.DTOs.Paging;
 using Application.Services.Interfaces;
 using Application.Services.Interfaces.Context;
+using Application.Utils;
 using AutoMapper;
 using Domain.Entities.Book;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +76,37 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<ResultDTO<SubmitBorrowResult>> SubmitBorrowAsync(int librarianId,SubmitBorrowDTO submitBorrowDTO)
+        {
+            var result = new ResultDTO<SubmitBorrowResult>
+            {
+                Status=SubmitBorrowResult.Success,
+                Message="عملیات با موفقیت انجام شد"
+            };
+
+            var milidiDueDate = submitBorrowDTO.DueDate.ToMiladiDate();
+            if (DateTime.Now > milidiDueDate)
+            {
+                result.Status = SubmitBorrowResult.Success;
+                result.Message = "تاریخ سر رسید نا معتبر است";
+
+                return result;
+            }
+
+
+            var borrow =_mapper.Map<SubmitBorrowDTO,Borrowing>(submitBorrowDTO);
+
+            borrow.LibrarianId = librarianId;
+
+            borrow.DueDate = milidiDueDate;
+
+            await _context.Borrowings.AddAsync(borrow);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
 
 
 

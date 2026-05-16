@@ -6,6 +6,7 @@ namespace Application.Services.Interfaces
 {
     public interface IBookCopyService
     {
+        Task<ResultDTO<GetAllBookCopiesResult, List<BookCopyListItemDTO>>> GetAllBookCopiesAsync();
         Task<FilterBookCopyDTO> FilterBookCopyAsync(FilterBookCopyDTO filter);
         Task<BookCopy> GetBookCopyByIdAsync(int bookCopyId);
         Task<ResultDTO<AddBookCopyResult>> AddBookCopyAsync(AddBookCopyDTO addBookCopyDTO);

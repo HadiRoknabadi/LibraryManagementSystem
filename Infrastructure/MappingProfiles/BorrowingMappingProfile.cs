@@ -18,6 +18,10 @@ namespace Infrastructure.MappingProfiles
                 .ForMember(d => d.ReturnDate,opt => opt.MapFrom(src => src.ReturnDate.HasValue
                 ? src.ReturnDate.Value.ToShamsiDate():null));
 
+            CreateMap<SubmitBorrowDTO, Borrowing>()
+                .ForMember(s => s.BorrowDate, m => m.MapFrom(d => DateTime.Now))
+                .ForMember(s => s.Status, m => m.MapFrom(d => BorrowingStatus.Borrowed));
+
         }
     }
 }

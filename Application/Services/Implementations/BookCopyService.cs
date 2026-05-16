@@ -25,6 +25,34 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<ResultDTO<GetAllBookCopiesResult, List<BookCopyListItemDTO>>> GetAllBookCopiesAsync()
+        {
+            var result = new ResultDTO<GetAllBookCopiesResult, List<BookCopyListItemDTO>>
+            {
+                Status=GetAllBookCopiesResult.Success,
+                Message="اطلاعات با موفقیت دریافت شدند",
+                Data=new List<BookCopyListItemDTO>()
+            };
+
+            var bookCopies = await _context.BookCopies
+                .Include(b=>b.Book)
+                .AsQueryable().AsNoTracking().ToListAsync();
+
+            if(bookCopies==null)
+            {
+                result.Status = GetAllBookCopiesResult.BookCopiesEmpty;
+                result.Message = "نسخه ای یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<BookCopy>, List<BookCopyListItemDTO>>(bookCopies);
+
+            return result;
+
+        }
+
+
         public async Task<BookCopy> GetBookCopyByIdAsync(int bookCopyId)
         {
             return await _context.BookCopies.AsQueryable().SingleOrDefaultAsync(b => b.Id == bookCopyId);

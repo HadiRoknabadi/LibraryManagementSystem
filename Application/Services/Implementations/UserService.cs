@@ -31,6 +31,32 @@ namespace Application.Services.Implementations
 
         #endregion
 
+        public async Task<ResultDTO<GetAllUsersResult, List<UserListItemDTO>>> GetAllUsersAsync()
+        {
+            var result = new ResultDTO<GetAllUsersResult, List<UserListItemDTO>>
+            {
+                Status=GetAllUsersResult.Success,
+                Message="اطلاعات با موفقیت دریافت شدند",
+                Data=new List<UserListItemDTO>()
+            };
+
+            var users=await _userManager.Users.AsQueryable().AsNoTracking().ToListAsync();
+
+            if(users==null)
+            {
+                result.Status=GetAllUsersResult.UsersEmpty;
+                result.Message = "کاربری یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<User>, List<UserListItemDTO>>(users);
+
+            return result;
+
+        }
+
+
         public async Task<FilterUserDTO> FilterUserAsync(FilterUserDTO filter)
         {
             var query = _userManager.Users

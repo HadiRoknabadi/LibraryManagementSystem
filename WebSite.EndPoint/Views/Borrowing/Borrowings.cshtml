@@ -1,9 +1,14 @@
 ﻿@model FilterBorrowingDTO
 @using Application.DTOs.Borrowing
+@using Application.DTOs.BookCopy
 @using Domain.Entities.Book
+@using Application.DTOs.User
 
 @{
     ViewData["Title"] = "مدیریت امانت ها";
+
+    var users = ViewData["Users"] as List<UserListItemDTO>;
+    var bookCopies = ViewData["BookCopies"] as List<BookCopyListItemDTO>;
 }
 
 <div class="container margin-bottom-10">
@@ -141,11 +146,11 @@
 
                 <div class="form-group">
 
-                    <form asp-controller="Borrowing" asp-action="SubmitBorrowBook" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                    <form asp-controller="Borrowing" asp-action="SubmitBorrow" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
 
 
 
-                        @* <partial name="_AddBookCopy" model="@(new AddBookCopyDTO { Books = books })" /> *@
+                        <partial name="_SubmitBorrow" model="@(new SubmitBorrowDTO { Users=users,BookCopies = bookCopies })" />
                         <div class="custome-modal-footer">
                             <button type="submit" class="btn btn-success pull-right">ثبت</button>
                             <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
@@ -207,4 +212,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script>
+        CreateDatePicker('DueDate');
+    </script>
 }

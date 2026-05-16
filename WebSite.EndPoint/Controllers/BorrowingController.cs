@@ -1,7 +1,10 @@
-﻿using Application.DTOs.Borrowing;
+﻿using Application.DTOs.BookCopy;
+using Application.DTOs.Borrowing;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebSite.EndPoint.Http;
+using WebSite.EndPoint.PresentationExtensions;
 
 namespace WebSite.EndPoint.Controllers
 {
@@ -11,22 +14,78 @@ namespace WebSite.EndPoint.Controllers
         #region Constructor
 
         private readonly IBorrowingService _borrowingService;
+        private readonly IBookCopyService _bookCopyService;
+        private readonly IUserService _userService;
 
-        public BorrowingController(IBorrowingService borrowingService)
+        public BorrowingController(IBorrowingService borrowingService, IBookCopyService bookCopyService, IUserService userService)
         {
             _borrowingService = borrowingService;
+            _bookCopyService = bookCopyService;
+            _userService = userService;
         }
 
+
         #endregion
+
+        #region Borrowings
 
         [Route("Borrowings")]
         public async Task<IActionResult> Borrowings(FilterBorrowingDTO filter)
         {
+            #region Fill Select Lists
+
+            var users = await _userService.GetAllUsersAsync();
+
+            var bookCopies = await _bookCopyService.GetAllBookCopiesAsync();
+
+
+            ViewData["BookCopies"] = bookCopies.Data;
+            ViewData["Users"] = users.Data;
+
+            #endregion
+
             filter.HowManyShowPageAfterAndBefore = 5;
             filter.TakeEntity = 20;
 
             var result = await _borrowingService.FilterBorrowingAsync(filter);
             return View(result);
         }
+
+        #endregion
+
+        #region Submit Borrow
+
+        [Route("SubmitBorrow")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitBorrow(SubmitBorrowDTO submitBorrowDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _borrowingService.SubmitBorrowAsync(User.GetUserId(),submitBorrowDTO);
+
+                switch (result.Status)
+                {
+                    case SubmitBorrowResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    case SubmitBorrowResult.DueDatePassedFromNow:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+        }
+
+        #endregion
+
     }
 }

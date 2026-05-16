@@ -3,6 +3,7 @@ using Application.DTOs.Author;
 using Application.DTOs.Book;
 using Application.DTOs.BookCategory;
 using Application.DTOs.BookCopy;
+using Application.DTOs.Borrowing;
 using Application.DTOs.Publisher;
 using Application.DTOs.User;
 using Domain.Entities.Book;
@@ -68,6 +69,13 @@ namespace Infrastructure.FluentValidationConfigs
 
             services.AddScoped<IValidator<AddBookCopyDTO>, AddBookCopyDTOValidator>();
             services.AddScoped<IValidator<EditBookCopyDTO>, EditBookCopyDTOValidator>();
+
+            #endregion
+
+            #region Borrow 
+
+            services.AddScoped<IValidator<SubmitBorrowDTO>, SubmitBorrowDTOValidator>();
+
 
             #endregion
 

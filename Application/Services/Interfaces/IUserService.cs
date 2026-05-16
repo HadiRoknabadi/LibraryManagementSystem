@@ -6,6 +6,7 @@ namespace Application.Services.Interfaces
 {
     public interface IUserService
     {
+        Task<ResultDTO<GetAllUsersResult, List<UserListItemDTO>>> GetAllUsersAsync();
         Task<FilterUserDTO> FilterUserAsync(FilterUserDTO filter);
         Task<ResultDTO<GetUserDetailsResult, UserDetailsDTO>> GetUserDetailsAsync(int userId);
         Task<ResultDTO<AddUserResult>> AddUserAsync(AddUserDTO userDTO);
