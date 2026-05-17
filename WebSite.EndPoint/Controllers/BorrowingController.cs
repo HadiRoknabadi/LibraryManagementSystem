@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.Borrowing;
+using Application.DTOs.Publisher;
+using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -122,6 +124,31 @@ namespace WebSite.EndPoint.Controllers
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
         }
 
+
+        #endregion
+
+
+        #region Delete Borrow
+
+        [Route("DeleteBorrow/{Id}")]
+        public async Task<IActionResult> DeleteBorrow(int Id)
+        {
+            var result = await _borrowingService.DeleteBorrowAsync(Id);
+            switch (result.Status)
+            {
+                case DeleteBorrowResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case DeleteBorrowResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+
+        }
 
         #endregion
 

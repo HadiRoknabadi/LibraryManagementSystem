@@ -154,6 +154,32 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<DeleteBorrowResult>> DeleteBorrowAsync(int id)
+        {
+            var result = new ResultDTO<DeleteBorrowResult>
+            {
+                Status=DeleteBorrowResult.Success,
+                Message="عملیات با موفقیت انجام شد"
+            };
+
+            var borrow = await GetBorrowByIdAsync(id);
+
+            if (borrow == null)
+            {
+                result.Status = DeleteBorrowResult.NotFound;
+                result.Message = "موردی یافت نشد";
+
+                return result;
+            }
+
+            borrow.IsDelete = true;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+
+        }
 
 
 

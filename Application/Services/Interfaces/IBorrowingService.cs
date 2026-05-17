@@ -10,5 +10,6 @@ namespace Application.Services.Interfaces
         Task<FilterBorrowingDTO> FilterBorrowingAsync(FilterBorrowingDTO filter);
         Task<ResultDTO<SubmitBorrowResult>> SubmitBorrowAsync(int librarianId,SubmitBorrowDTO submitBorrowDTO);
         Task<ResultDTO<EditBorrowResult>> EditBorrowAsync(EditBorrowDTO editBorrowDTO);
+        Task<ResultDTO<DeleteBorrowResult>> DeleteBorrowAsync(int id);
     }
 }
