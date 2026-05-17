@@ -75,6 +75,7 @@ namespace Infrastructure.FluentValidationConfigs
             #region Borrow 
 
             services.AddScoped<IValidator<SubmitBorrowDTO>, SubmitBorrowDTOValidator>();
+            services.AddScoped<IValidator<EditBorrowDTO>, EditBorrowDTOValidator>();
 
 
             #endregion

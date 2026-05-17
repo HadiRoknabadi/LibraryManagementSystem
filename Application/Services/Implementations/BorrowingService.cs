@@ -23,6 +23,13 @@ namespace Application.Services.Implementations
             _mapper = mapper;
         }
 
+        public async Task<Borrowing> GetBorrowByIdAsync(int id)
+        {
+            return await _context.Borrowings.AsQueryable()
+                .SingleOrDefaultAsync(b=>b.Id== id);
+        }
+
+
         #endregion
 
         public async Task<FilterBorrowingDTO> FilterBorrowingAsync(FilterBorrowingDTO filter)
@@ -87,7 +94,7 @@ namespace Application.Services.Implementations
             var milidiDueDate = submitBorrowDTO.DueDate.ToMiladiDate();
             if (DateTime.Now > milidiDueDate)
             {
-                result.Status = SubmitBorrowResult.Success;
+                result.Status = SubmitBorrowResult.DueDatePassedFromNow;
                 result.Message = "تاریخ سر رسید نا معتبر است";
 
                 return result;
@@ -101,6 +108,45 @@ namespace Application.Services.Implementations
             borrow.DueDate = milidiDueDate;
 
             await _context.Borrowings.AddAsync(borrow);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
+        public async Task<ResultDTO<EditBorrowResult>> EditBorrowAsync(EditBorrowDTO editBorrowDTO)
+        {
+            var result = new ResultDTO<EditBorrowResult>
+            {
+                Status=EditBorrowResult.Success,
+                Message="عملیات با موفقیت انجام شد"
+            };
+
+            var borrow = await GetBorrowByIdAsync(editBorrowDTO.Id);
+
+            if(borrow == null)
+            {
+                result.Status = EditBorrowResult.NotFound;
+                result.Message = "موردی یافت نشد";
+
+                return result;
+            }
+
+            var milidiDueDate = editBorrowDTO.DueDate.ToMiladiDate();
+            if (DateTime.Now > milidiDueDate)
+            {
+                result.Status = EditBorrowResult.DueDatePassedFromNow;
+                result.Message = "تاریخ سر رسید نا معتبر است";
+
+                return result;
+            }
+
+
+
+            _mapper.Map<EditBorrowDTO, Borrowing>(editBorrowDTO, borrow);
+            borrow.DueDate = editBorrowDTO.DueDate.ToMiladiDate();
+
 
             await _context.SaveChangesAsync();
 

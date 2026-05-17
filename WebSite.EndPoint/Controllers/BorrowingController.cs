@@ -1,5 +1,4 @@
-﻿using Application.DTOs.BookCopy;
-using Application.DTOs.Borrowing;
+﻿using Application.DTOs.Borrowing;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -86,6 +85,46 @@ namespace WebSite.EndPoint.Controllers
         }
 
         #endregion
+
+        #region Edit Borrow
+
+        [Route("EditBorrow")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBorrow(EditBorrowDTO editBorrowDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _borrowingService.EditBorrowAsync(editBorrowDTO);
+
+                switch (result.Status)
+                {
+                    case EditBorrowResult.Success:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                    case EditBorrowResult.NotFound:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+
+                    case EditBorrowResult.DueDatePassedFromNow:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, result.Message, null);
+
+                    default:
+                        return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات با خطا مواجه شد", null);
+                }
+
+
+            }
+
+            var errors = string.Join(" | ", ModelState.Values
+           .SelectMany(v => v.Errors)
+           .Select(e => e.ErrorMessage));
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, errors, null);
+        }
+
+
+        #endregion
+
 
     }
 }

@@ -108,7 +108,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <a data-toggle="modal" data-target="#editBookCopyModal-@borrowing.Id"
+                                    <a data-toggle="modal" data-target="#editBorrowBookModal-@borrowing.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
                                     <a asp-controller="BookCopy" asp-action="DeleteBookCopy"
                                        asp-route-bookCopyId="@borrowing.Id" ajax-url-button="@borrowing.Id"
@@ -167,16 +167,16 @@
 <!-- end Subit Borrow Book Modal -->
 @if (Model.Borrowings != null && Model.Borrowings.Any())
 {
-    @foreach (var bookCopy in Model.Borrowings)
+    @foreach (var borrow in Model.Borrowings)
     {
-        <!-- Start Edit Book Copy Modal -->
+        <!-- start Subit Borrow Book Modal -->
 
 
-        <div class="modal fade" id="editBookCopyModal-@bookCopy.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editBorrowBookModal-@borrow.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">ویرایش نسخه</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">ویرایش</h5>
                         <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -185,8 +185,8 @@
 
                         <div class="form-group">
 
-                            <form asp-controller="BookCopy" asp-action="EditBookCopy" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
-                                @* <partial name="_EditBookCopy" model="@(new EditBookCopyDTO { Id = bookCopy.Id, BookId = bookCopy.BookId, ShelfLocation = bookCopy.ShelfLocation, Books = books })" /> *@
+                            <form asp-controller="Borrowing" asp-action="EditBorrow" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+                                <partial name="_EditBorrow" model="@(new EditBorrowDTO { Id = borrow.Id,UserId=borrow.UserId, BookCopyId = borrow.BookCopyId,DueDate=borrow.DueDate,Status=borrow.Status, Users = users, BookCopies = bookCopies })" />
                                 <div class="custome-modal-footer">
                                     <button type="submit" class="btn btn-success pull-right">ثبت</button>
                                     <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
@@ -201,7 +201,7 @@
             </div>
         </div>
 
-        <!-- End Edit Book Copy Modal -->
+        <!-- end Subit Borrow Book Modal -->
     }
 }
 

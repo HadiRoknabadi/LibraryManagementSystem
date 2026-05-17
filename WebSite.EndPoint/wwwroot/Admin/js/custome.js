@@ -264,8 +264,18 @@ function CheckImageIsNull(formId, btnSubmitId, fileInputId, name) {
 
 }
 function CreateDatePicker(inputId) {
-    kamaDatepicker(inputId, { placeholder: "1400/01/01", buttonsColor: "red", forceFarsiDigits: true, markToday: true, markHolidays: true });
+    var elements = document.querySelectorAll("[id='" + inputId + "']");
 
+    elements.forEach(function (el) {
+        kamaDatepicker(el, {
+            placeholder: "1400/01/01",
+            buttonsColor: "red",
+            forceFarsiDigits: true,
+            markToday: true,
+            markHolidays: true
+        });
+    });
 }
+
 
 

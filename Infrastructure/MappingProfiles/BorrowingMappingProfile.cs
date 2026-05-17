@@ -22,6 +22,9 @@ namespace Infrastructure.MappingProfiles
                 .ForMember(s => s.BorrowDate, m => m.MapFrom(d => DateTime.Now))
                 .ForMember(s => s.Status, m => m.MapFrom(d => BorrowingStatus.Borrowed));
 
+            CreateMap<EditBorrowDTO, Borrowing>()
+                .ForMember(d=>d.DueDate,d=>d.Ignore());
+
         }
     }
 }
