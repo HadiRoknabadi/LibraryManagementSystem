@@ -36,6 +36,7 @@ namespace Application.Services.Implementations
         {
             var query = _context.Borrowings
             .Include(b => b.User)
+            .Include(b => b.Librarian)
             .Include(b=>b.BookCopy)
             .ThenInclude(b=>b.Book)
             .AsQueryable().AsNoTracking();

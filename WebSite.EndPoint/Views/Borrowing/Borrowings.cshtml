@@ -70,6 +70,12 @@
                                 شناسه
                             </th>
                             <th>
+                                عضو
+                            </th>
+                            <th>
+                                کارمند ثبت کننده
+                            </th>
+                            <th>
                                 نام کتاب
                             </th>
                             <th>
@@ -86,6 +92,12 @@
                             <tr id="ajax-url-item-@borrowing.Id">
                                 <td>
                                     @borrowing.Id
+                                </td>
+                                <td>
+                                    @borrowing.UserFullName
+                                </td>
+                                <td>
+                                    @borrowing.LibrarianFullName
                                 </td>
                                 <td>
                                     @borrowing.BookName
