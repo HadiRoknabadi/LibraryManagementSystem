@@ -155,6 +155,35 @@ namespace Application.Services.Implementations
 
         }
 
+        public  async Task<ResultDTO<ReturnBorrowResult>> ReturnBorrowAsync(int borrowId)
+        {
+            var result = new ResultDTO<ReturnBorrowResult>
+            {
+                Status=ReturnBorrowResult.Success,
+                Message="عملیات با موفقیت انجام شد"
+            };
+
+            var borrow = await GetBorrowByIdAsync(borrowId);
+
+            if(borrow == null)
+            {
+                result.Status = ReturnBorrowResult.NotFound;
+                result.Message = "آیتمی یافت نشد";
+
+                return result;
+            }
+
+            borrow.Status = BorrowingStatus.Returned;
+            borrow.ReturnDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return result;
+
+
+        }
+
+
         public async Task<ResultDTO<DeleteBorrowResult>> DeleteBorrowAsync(int id)
         {
             var result = new ResultDTO<DeleteBorrowResult>

@@ -1,6 +1,4 @@
 ﻿using Application.DTOs.Borrowing;
-using Application.DTOs.Publisher;
-using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +7,7 @@ using WebSite.EndPoint.PresentationExtensions;
 
 namespace WebSite.EndPoint.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class BorrowingController : BaseController
     {
         #region Constructor
@@ -63,7 +61,7 @@ namespace WebSite.EndPoint.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _borrowingService.SubmitBorrowAsync(User.GetUserId(),submitBorrowDTO);
+                var result = await _borrowingService.SubmitBorrowAsync(User.GetUserId(), submitBorrowDTO);
 
                 switch (result.Status)
                 {
@@ -127,6 +125,29 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Return Borrow
+
+        [Route("ReturnBorrow/{Id}")]
+        public async Task<IActionResult> ReturnBorrow(int Id)
+        {
+            var result = await _borrowingService.ReturnBorrowAsync(Id);
+            switch (result.Status)
+            {
+                case ReturnBorrowResult.Success:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, result.Message, null);
+
+                case ReturnBorrowResult.NotFound:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, result.Message, null);
+
+                default:
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Error, "عملیات مورد نظر با خطا مواجه شد", null);
+
+
+            }
+        }
+
+
+        #endregion
 
         #region Delete Borrow
 
@@ -155,3 +176,4 @@ namespace WebSite.EndPoint.Controllers
 
     }
 }
+

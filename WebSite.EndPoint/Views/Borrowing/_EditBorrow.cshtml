@@ -32,14 +32,4 @@
             <span asp-validation-for="DueDate" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-sm-12">
-        <div class="form-group">
-            <label>وضعیت</label>
-            <select asp-for="Status" asp-items="Html.GetEnumSelectList<BorrowingStatus>()"
-                    class="form-control">
-                <option value="0">لطفا یک گزینه را انتخاب کنید</option>
-            </select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-    </div>
 </div>
