@@ -84,6 +84,38 @@ namespace Application.Services.Implementations
             return filter.SetPaging(pager).SetData(allEntities);
         }
 
+        public async Task<ResultDTO<GetBorrowDetailsResult, BorrowDetailsDTO>> GetBorrowDetailsAsync(int id)
+        {
+            var result = new ResultDTO<GetBorrowDetailsResult, BorrowDetailsDTO>
+            {
+                Status=GetBorrowDetailsResult.Success,
+                Message="اطلاعات با موفقیت دریافت شد",
+                Data=new BorrowDetailsDTO()
+            };
+
+            var borrow=await _context.Borrowings
+            .Include(b => b.User)
+            .Include(b => b.Librarian)
+            .Include(b => b.BookCopy)
+            .ThenInclude(b => b.Book)
+            .AsQueryable()
+            .SingleOrDefaultAsync(b=>b.Id == id);
+
+            if(borrow == null)
+            {
+                result.Status = GetBorrowDetailsResult.NotFound;
+                result.Message = "اطلاعاتی یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<Borrowing, BorrowDetailsDTO>(borrow);
+
+            return result;
+
+        }
+
+
         public async Task<ResultDTO<SubmitBorrowResult>> SubmitBorrowAsync(int librarianId,SubmitBorrowDTO submitBorrowDTO)
         {
             var result = new ResultDTO<SubmitBorrowResult>

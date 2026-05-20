@@ -119,9 +119,14 @@
                                     }
                                 </td>
                                 <td>
-                                    <a asp-controller="Borrowing" asp-action="ReturnBorrow"
-                                       asp-route-Id="@borrowing.Id" ajax-url-button="@borrowing.Id" Hide="False"
-                                       class="btn btn-success btn-xs">ثبت بازگشت</a>
+                                    @if (borrowing.Status != BorrowingStatus.Returned)
+                                    {
+                                        <a asp-controller="Borrowing" asp-action="ReturnBorrow"
+                                           asp-route-Id="@borrowing.Id" ajax-url-button="@borrowing.Id" Hide="False"
+                                           class="btn btn-success btn-xs">ثبت بازگشت</a>
+                                    }
+                                    <a asp-controller="Borrowing" asp-action="BorrowDetails"
+                                       asp-route-Id="@borrowing.Id" class="btn btn-info btn-xs">نمایش جزئیات</a>
                                     <a data-toggle="modal" data-target="#editBorrowBookModal-@borrowing.Id"
                                        class="btn btn-warning btn-xs">ویرایش</a>
                                     <a asp-controller="Borrowing" asp-action="DeleteBorrow"
@@ -164,7 +169,7 @@
 
 
 
-                        <partial name="_SubmitBorrow" model="@(new SubmitBorrowDTO { Users=users,BookCopies = bookCopies })" />
+                        <partial name="_SubmitBorrow" model="@(new SubmitBorrowDTO { Users = users, BookCopies = bookCopies })" />
                         <div class="custome-modal-footer">
                             <button type="submit" class="btn btn-success pull-right">ثبت</button>
                             <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
@@ -200,7 +205,7 @@
                         <div class="form-group">
 
                             <form asp-controller="Borrowing" asp-action="EditBorrow" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
-                                <partial name="_EditBorrow" model="@(new EditBorrowDTO { Id = borrow.Id,UserId=borrow.UserId, BookCopyId = borrow.BookCopyId,DueDate=borrow.DueDate, Users = users, BookCopies = bookCopies })" />
+                                <partial name="_EditBorrow" model="@(new EditBorrowDTO { Id = borrow.Id, UserId = borrow.UserId, BookCopyId = borrow.BookCopyId, DueDate = borrow.DueDate, Users = users, BookCopies = bookCopies })" />
                                 <div class="custome-modal-footer">
                                     <button type="submit" class="btn btn-success pull-right">ثبت</button>
                                     <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>

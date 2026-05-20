@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.BookCopy;
+using Application.DTOs.Borrowing;
 using Application.DTOs.Common;
 using Domain.Entities.Book;
 

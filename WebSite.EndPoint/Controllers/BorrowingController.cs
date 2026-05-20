@@ -52,6 +52,30 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Borrow Details
+
+        [Route("BorrowDetails/{id}")]
+        public async Task<IActionResult> BorrowDetails(int id)
+        {
+            var result = await _borrowingService.GetBorrowDetailsAsync(id);
+
+            switch (result.Status)
+            {
+                case GetBorrowDetailsResult.Success:
+                    return View(result.Data);
+
+                case GetBorrowDetailsResult.NotFound:
+                    TempData[Toast_WarningMessage] = result.Message;
+                    return RedirectToAction(nameof(Borrowings));
+
+                default:
+                    return RedirectToAction(nameof(Borrowings));
+
+            }
+        }
+
+        #endregion
+
         #region Submit Borrow
 
         [Route("SubmitBorrow")]
