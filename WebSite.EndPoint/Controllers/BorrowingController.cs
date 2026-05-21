@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Borrowing;
 using Application.Services.Interfaces;
+using Domain.Entities.Book;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebSite.EndPoint.Http;
@@ -15,13 +16,16 @@ namespace WebSite.EndPoint.Controllers
         private readonly IBorrowingService _borrowingService;
         private readonly IBookCopyService _bookCopyService;
         private readonly IUserService _userService;
+        private IQuestPDFService _questPDFService;
 
-        public BorrowingController(IBorrowingService borrowingService, IBookCopyService bookCopyService, IUserService userService)
+        public BorrowingController(IBorrowingService borrowingService, IBookCopyService bookCopyService, IUserService userService, IQuestPDFService questPDFService)
         {
             _borrowingService = borrowingService;
             _bookCopyService = bookCopyService;
             _userService = userService;
+            _questPDFService = questPDFService;
         }
+
 
 
         #endregion
@@ -197,6 +201,35 @@ namespace WebSite.EndPoint.Controllers
 
         #endregion
 
+        #region Report
+
+        [Route("GetBorrowingsReport")]
+        public async Task<IActionResult> ExportToPdf()
+        {
+            var result=await _borrowingService.GetBorrowingsForReportAsync();
+
+            switch (result.Status)
+            {
+                case GetBorrowingsResult.Success:
+                    var pdfBytes = await _questPDFService.GenerateBorrowingsReportAsync(result.Data);
+                    return File(pdfBytes, "application/pdf", $"borrowings-{DateTime.Now:yyyyMMddHHmmss}.pdf");
+
+
+                case GetBorrowingsResult.BorrowingsEmpty:
+                    TempData[Toast_WarningMessage] = result.Message;
+                    break;
+
+                default:
+                    TempData[Toast_ErrorMessage] = "عملیات با خطا مواجه شد";
+                    break;
+            }
+
+            return RedirectToAction(nameof(Borrowings));
+
+        }
+
+
+        #endregion
 
     }
 }

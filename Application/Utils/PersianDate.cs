@@ -16,10 +16,10 @@ namespace Application.Utils
         {
             PersianCalendar pc = new PersianCalendar();
 
-            return pc.GetYear(value) + "/" + pc.GetMonth(value).ToString("00") + "/" +
-                   pc.GetDayOfMonth(value).ToString("00") + " " + pc.GetHour(value) + ":" + pc.GetMinute(value)
-                   + ":" + pc.GetSecond(value);
+            return $"{pc.GetYear(value)}/{pc.GetMonth(value):00}/{pc.GetDayOfMonth(value):00} " +
+                   $"{pc.GetHour(value):00}:{pc.GetMinute(value):00}:{pc.GetSecond(value):00}";
         }
+
 
         public static string ToStringMiladiDate(this DateTime value)
         {

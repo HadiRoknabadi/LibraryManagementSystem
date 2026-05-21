@@ -29,7 +29,7 @@ namespace Domain.Entities.Book
 
     public enum BorrowingStatus
     {
-        [Display(Name = "امانت داده شده")]
+        [Display(Name = "در امانت")]
         Borrowed,
 
         [Display(Name = "تحویل داده شده")]

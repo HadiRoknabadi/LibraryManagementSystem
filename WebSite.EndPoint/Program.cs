@@ -5,6 +5,7 @@ using Infrastructure.MappingProfiles;
 using Infrastructure.WebMarkupMinConfigs;
 using Infrastructures.IdentityConfigs;
 using Infrastructures.IoC;
+using QuestPDF.Infrastructure;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using WebMarkupMin.AspNetCoreLatest;
@@ -36,7 +37,7 @@ builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new
 #endregion
 
 builder.Services.AddWebMarkupMinServices();
-
+QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
 

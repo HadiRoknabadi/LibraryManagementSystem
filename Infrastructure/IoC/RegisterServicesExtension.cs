@@ -1,6 +1,7 @@
 using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Application.Services.Interfaces.Context;
+using Infrastructure.QuestPDF;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Context;
 
@@ -19,6 +20,7 @@ namespace Infrastructures.IoC
             services.AddScoped<IBookService,BookService>();
             services.AddScoped<IBookCopyService,BookCopyService>();
             services.AddScoped<IBorrowingService,BorrowingService>();
+            services.AddScoped<IQuestPDFService,QuestPDFService>();
 
 
             return services;

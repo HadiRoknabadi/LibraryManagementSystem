@@ -215,6 +215,36 @@ namespace Application.Services.Implementations
 
         }
 
+        public async Task<ResultDTO<GetBorrowingsResult, List<BorrowingReportDTO>>> GetBorrowingsForReportAsync()
+        {
+            var result = new ResultDTO<GetBorrowingsResult, List<BorrowingReportDTO>>
+            {
+                Status = GetBorrowingsResult.Success,
+                Message="اطلاعات با موفقیت دریافت شدند",
+                Data=new List<BorrowingReportDTO>()
+            };
+
+            var borrowings = await _context.Borrowings
+                .Include(b=>b.BookCopy)
+                .ThenInclude(b=>b.Book)
+                .Include(u=>u.User)
+                .Include(l=>l.Librarian)
+                .AsQueryable().ToListAsync();
+
+            if(borrowings== null)
+            {
+                result.Status = GetBorrowingsResult.BorrowingsEmpty;
+                result.Message = "اطلاعاتی یافت نشد";
+
+                return result;
+            }
+
+            result.Data = _mapper.Map<List<Borrowing>, List<BorrowingReportDTO>>(borrowings);
+
+            return result;
+
+        }
+
 
         public async Task<ResultDTO<DeleteBorrowResult>> DeleteBorrowAsync(int id)
         {
