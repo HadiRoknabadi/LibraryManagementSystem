@@ -109,12 +109,13 @@
                                             <span class="label label-success">بازگردانده شده</span>
                                             break;
 
-                                        case BorrowingStatus.Late:
-                                            <span class="label label-danger">تاخیر در برگشت</span>
-                                            break;
-
                                         case BorrowingStatus.Borrowed:
                                             <span class="label label-warning">در امانت</span>
+                                            @if (DateTime.Now > borrowing.DueDate.ToMiladiDate())
+                                            {
+                                                <span class="label label-danger">دارای دیرکرد</span>
+
+                                            }
                                             break;
                                     }
                                 </td>

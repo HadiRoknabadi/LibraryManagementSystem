@@ -33,9 +33,6 @@ namespace Domain.Entities.Book
         Borrowed,
 
         [Display(Name = "تحویل داده شده")]
-        Returned,
-
-        [Display(Name = "دارای دیرکرد")]
-        Late
+        Returned
     }
 }
