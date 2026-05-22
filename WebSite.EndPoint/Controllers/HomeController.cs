@@ -1,3 +1,4 @@
+using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,23 @@ namespace WebSite.EndPoint.Controllers
     [Authorize(Roles = "Admin")]
     public class HomeController : BaseController
     {
-        [Route("/")]
-        public IActionResult Dashboard()
+        #region Constructor
+
+        private readonly IDashboardService _dashboardService;
+
+        public HomeController(IDashboardService dashboardService)
         {
-            return View();
+            _dashboardService = dashboardService;
+        }
+
+        #endregion
+
+        [Route("/")]
+        public async Task<IActionResult> Dashboard()
+        {
+            var dashboardData=await _dashboardService.GetDashboardDataAsync();
+
+            return View(dashboardData);
         }
     }
 }

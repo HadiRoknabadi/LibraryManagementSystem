@@ -1,8 +1,61 @@
-﻿@{
+﻿@model Application.DTOs.Dashboard.DashboardDataDTO
+
+@{
     ViewData["Title"] = "داشبورد";
 }
 
 <div class="row">
 
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="sweet-box">
+            <div class="row">
+                <div class="col-lg-2">
+                    <i class="fa fa-users font-size-20"></i>
+                </div>
+                <div class="col-lg-10">
+                    <label class="font-size-15">تعداد اعضا : @Model.TotalMembers</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="sweet-box">
+            <div class="row">
+                <div class="col-lg-2">
+                    <i class="fa fa-book font-size-20"></i>
+                </div>
+                <div class="col-lg-10">
+                    <label class="font-size-15">تعداد کتاب ها : @Model.TotalBooks</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="sweet-box">
+            <div class="row">
+                <div class="col-lg-2">
+                    <i class="fa fa-exchange font-size-20"></i>
+                </div>
+                <div class="col-lg-10">
+                    <label class="font-size-15">کتاب های در امانت : @Model.TotalBorrowed</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="sweet-box">
+            <div class="row">
+                <div class="col-lg-2">
+                    <i class="fa fa-clock-o font-size-20"></i>
+                </div>
+                <div class="col-lg-10">
+                    <label class="font-size-15">موارد دارای دیرکرد : @Model.ToalOverDue</label>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

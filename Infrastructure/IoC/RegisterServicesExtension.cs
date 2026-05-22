@@ -21,6 +21,7 @@ namespace Infrastructures.IoC
             services.AddScoped<IBookCopyService,BookCopyService>();
             services.AddScoped<IBorrowingService,BorrowingService>();
             services.AddScoped<IQuestPDFService,QuestPDFService>();
+            services.AddScoped<IDashboardService,DashboardService>();
 
 
             return services;
