@@ -13,14 +13,23 @@ namespace Application.DTOs.Publisher
     {
         public AddPublisherDTOValidator()
         {
-            RuleFor(b => b.Name).NotEmpty().WithMessage("لطفا نام ناشر را وارد کنید")
-                .MaximumLength(200).WithMessage("نام ناشر نمیتواند بیشتر از 200 کاراکتر باشد");
+            RuleFor(b => b.Name)
+                .NotEmpty()
+                .WithName("نام ناشر")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(200)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
             RuleFor(b => b.PhoneNumber)
-                .MaximumLength(20).WithMessage("شماره تلفن نمیتواند بیشتر از 20 کاراکتر باشد");
+                .MaximumLength(20)
+                .WithName("شماره تلفن")
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
             RuleFor(b => b.Address)
-                .MaximumLength(300).WithMessage("آدرس نمیتواند بیشتر از 300 کاراکتر باشد");
+                .MaximumLength(300)
+                .WithName("آدرس")
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
+
         }
     }
 

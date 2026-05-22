@@ -16,11 +16,20 @@ namespace Application.DTOs.Book
     {
         public EditBookDTOValidator()
         {
-            RuleFor(b => b.Title).NotEmpty().WithMessage("لطفا نام کتاب را وارد کنید")
-                .MaximumLength(300).WithMessage("نام کتاب نمیتواند بیشتر از 300 کاراکتر باشد");
+            RuleFor(b => b.Title)
+                .NotEmpty()
+                .WithName("نام کتاب")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(300)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
-            RuleFor(b => b.ISBN).NotEmpty().WithMessage("لطفا ISBN را وارد کنید")
-                .MaximumLength(20).WithMessage("ISBN نمیتواند بیشتر از 20 کاراکتر باشد");
+            RuleFor(b => b.ISBN)
+                .NotEmpty()
+                .WithName("ISBN")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(20)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
+
         }
     }
 

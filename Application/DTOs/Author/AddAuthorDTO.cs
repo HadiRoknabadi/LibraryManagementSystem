@@ -12,11 +12,20 @@ namespace Application.DTOs.Author
     {
         public AddAuthorDTOValidator()
         {
-            RuleFor(b => b.Name).NotEmpty().WithMessage("لطفا نام نویسنده را وارد کنید")
-                .MaximumLength(200).WithMessage("نام نویسنده نمیتواند بیشتر از 200 کاراکتر باشد");
+            RuleFor(b => b.Name)
+                .NotEmpty()
+                .WithName("نام نویسنده")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(200)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
-            RuleFor(b => b.Family).NotEmpty().WithMessage("لطفا نام خانوادگی نویسنده را وارد کنید")
-                .MaximumLength(200).WithMessage("نام خانوادگی نویسنده نمیتواند بیشتر از 200 کاراکتر باشد");
+            RuleFor(b => b.Family)
+                .NotEmpty()
+                .WithName("نام خانوادگی نویسنده")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(200)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
+
         }
     }
 

@@ -19,6 +19,7 @@ namespace Application.DTOs.BookCopy
                 .MaximumLength(100)
                 .WithName("موقعیت قفسه")
                 .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
+
         }
     }
 

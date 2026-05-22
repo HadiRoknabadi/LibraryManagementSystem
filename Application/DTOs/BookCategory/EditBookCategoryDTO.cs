@@ -13,8 +13,13 @@ namespace Application.DTOs.BookCategory
     {
         public EditBookCategoryDTOValidator()
         {
-            RuleFor(b => b.Title).NotEmpty().WithMessage("لطفا نام دسته بندی را وارد کنید")
-                .MaximumLength(150).WithMessage("نام دسته بندی نمیتواند بیشتر از 150 کاراکتر باشد");
+            RuleFor(b => b.Title)
+                .NotEmpty()
+                .WithName("نام دسته بندی")
+                .WithMessage("{PropertyName} را وارد کنید")
+                .MaximumLength(150)
+                .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
+
         }
     }
 
