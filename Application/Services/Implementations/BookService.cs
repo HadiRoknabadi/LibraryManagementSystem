@@ -112,7 +112,8 @@ namespace Application.Services.Implementations
                 Data=null
             };
 
-            var book = await GetBookByIdAsync(bookId);
+            var book = await _context.Books.AsQueryable()
+                .Include(b=>b.BookAuthors).SingleOrDefaultAsync(b=>b.Id==bookId);
 
             if(book==null)
             {

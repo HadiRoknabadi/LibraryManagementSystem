@@ -11,7 +11,9 @@ namespace Infrastructure.MappingProfiles
             CreateMap<Book, BookListItemDTO>();
 
             CreateMap<AddBookDTO, Book>();
-            CreateMap<Book, EditBookDTO>();
+            CreateMap<Book, EditBookDTO>()
+                .ForMember(b => b.AuthorIds,m=>m.MapFrom(f=>f.BookAuthors.Select(b=>b.AuthorId).ToList()));
+
             CreateMap<EditBookDTO, Book>();
         }
     }
