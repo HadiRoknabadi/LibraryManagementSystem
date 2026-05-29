@@ -52,10 +52,8 @@ namespace Application.DTOs.User
                 .WithMessage("{PropertyName} نمی‌تواند بیشتر از {MaxLength} کاراکتر باشد");
 
             RuleFor(c => c.Password)
-                .NotEmpty()
-                .WithName("رمز عبور")
-                .WithMessage("{PropertyName} را وارد کنید")
                 .Length(8, 25)
+                .WithName("رمز عبور")
                 .WithMessage("{PropertyName} باید بین {MinLength} و {MaxLength} کاراکتر باشد");
 
 
