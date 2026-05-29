@@ -66,6 +66,9 @@
                                 <span asp-validation-for="AuthorIds" class="text-danger"></span>
                             </div>
                         </div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-danger" data-toggle="modal" data-target="#addAuthorModal">ایجاد نویسنده جدید</a>
+                        </div>
                     </div>
                     <button type="button" id="editBookBtn" class="btn btn-success">ثبت اطلاعات</button>
                 </form>
@@ -73,6 +76,42 @@
         </div>
     </div>
 </div>
+
+<!-- start Add Author Modal -->
+
+<div class="modal fade" id="addAuthorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">افزودن نویسنده</h5>
+                <button type="button" class="close margin-top-minus-21" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <form asp-controller="Author" asp-action="AddAuthor" method="post" asp-antiforgery="true" data-method="post" data-ajax="true" data-ajax-success="OnSuccessAddOrEditItem">
+
+
+
+                        <partial name="~/Views/Author/_AddAuthor.cshtml" model="@(new AddAuthorDTO { })" />
+                        <div class="custome-modal-footer">
+                            <button type="submit" class="btn btn-success pull-right">ثبت</button>
+                            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">بستن</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end Add Author Modal -->
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
