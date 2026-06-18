@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Author;
 using AutoFixture.Xunit2;
-using FluentValidation.TestHelper;;
+using FluentValidation.TestHelper;
 
 public class EditAuthorDTOValidatorTests
 {
