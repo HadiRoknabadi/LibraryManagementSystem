@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Author;
-using Application.DTOs.BookCategory;
 using Application.DTOs.Common;
 using Application.DTOs.Paging;
 using Application.Services.Interfaces;
