@@ -63,7 +63,7 @@ public class RoleServiceTests
             role.Id = 0;
             role.Name ??= Guid.NewGuid().ToString();
             role.NormalizedName = role.Name.ToUpper();
-            role.IsDelete = false; // مهم اگر QueryFilter دارید
+            role.IsDelete = false; 
         }
 
         await context.Roles.AddRangeAsync(roles);
