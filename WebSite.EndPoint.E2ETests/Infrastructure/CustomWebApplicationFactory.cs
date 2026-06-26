@@ -1,91 +1,185 @@
-﻿using Domain.Entities.Account;
-using DNTCaptcha.Core;
+﻿using DNTCaptcha.Core;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Persistence.Context;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 
-namespace WebSite.EndPoint.E2ETests.Infrastructure
+namespace WebSite.EndPoint.Tests.E2E.Fixtures;
+
+#region FakeCaptcha
+
+public class FakeCaptchaValidatorService
+    : IDNTCaptchaValidatorService
 {
-    public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
+    public bool HasRequestValidCaptchaEntry()
     {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.ConfigureServices(services =>
-            {
-                // حذف دیتابیس واقعی
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+        return true;
+    }
+}
 
-                if (descriptor != null)
-                {
-                    services.Remove(descriptor);
-                }
+#endregion
 
-                // جایگزینی با InMemory Database
-                services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseInMemoryDatabase("E2E_Test_Database");
-                });
+#region FakeAuth
 
-                // Mock کردن سرویس کپچا
-                var captchaDescriptor = services.SingleOrDefault(
-                    d => d.ServiceType == typeof(IDNTCaptchaValidatorService));
-
-                if (captchaDescriptor != null)
-                {
-                    services.Remove(captchaDescriptor);
-                }
-
-                services.AddSingleton<IDNTCaptchaValidatorService, FakeCaptchaValidatorService>();
-
-                var sp = services.BuildServiceProvider();
-
-                using (var scope = sp.CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<ApplicationDbContext>();
-
-                    db.Database.EnsureCreated();
-
-                    var userManager = scopedServices.GetRequiredService<UserManager<User>>();
-
-                    var testPhone = "09123456789";
-                    var testPassword = "Password123!";
-
-                    var existingUser = userManager.FindByNameAsync(testPhone).Result;
-                    if (existingUser == null)
-                    {
-                        var user = new User
-                        {
-                            UserName = testPhone,
-                            PhoneNumber = testPhone,
-                            PhoneNumberConfirmed = true,
-                            Name = "Test",
-                            Family = "User"
-                        };
-
-                        var result = userManager.CreateAsync(user, testPassword).Result;
-
-                        if (!result.Succeeded)
-                        {
-                            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                            throw new Exception($"Failed to seed test user: {errors}");
-                        }
-                    }
-                }
-            });
-        }
+public class TestAuthHandler
+    : AuthenticationHandler<AuthenticationSchemeOptions>
+{
+    public TestAuthHandler(
+        IOptionsMonitor<AuthenticationSchemeOptions> options,
+        ILoggerFactory logger,
+        UrlEncoder encoder)
+        : base(options, logger, encoder)
+    {
     }
 
-    // Mock سرویس کپچا که همیشه معتبر برمی‌گرداند
-    public class FakeCaptchaValidatorService : IDNTCaptchaValidatorService
+    protected override Task<AuthenticateResult>
+        HandleAuthenticateAsync()
     {
-        public bool HasRequestValidCaptchaEntry()
-        {
-            return true;
-        }
+        var claims =
+            new[]
+            {
+                new Claim(
+                    ClaimTypes.Name,
+                    "Admin"),
+
+                new Claim(
+                    ClaimTypes.Role,
+                    "Admin")
+            };
+
+        var identity =
+            new ClaimsIdentity(
+                claims,
+                "Test");
+
+        var principal =
+            new ClaimsPrincipal(
+                identity);
+
+        return Task.FromResult(
+            AuthenticateResult.Success(
+                new AuthenticationTicket(
+                    principal,
+                    "Test")));
+    }
+}
+
+#endregion
+
+public class FakeViewComponentHelper
+    : IViewComponentHelper
+{
+    public void Contextualize(
+        ViewContext viewContext)
+    {
+    }
+
+    public Task<IHtmlContent>
+        InvokeAsync(
+            string name,
+            object arguments)
+    {
+        return Task.FromResult<IHtmlContent>(
+            HtmlString.Empty);
+    }
+
+    public Task<IHtmlContent>
+        InvokeAsync(
+            Type componentType,
+            object arguments)
+    {
+        return Task.FromResult<IHtmlContent>(
+            HtmlString.Empty);
+    }
+}
+
+public class CustomWebApplicationFactory<TProgram>
+    : WebApplicationFactory<TProgram>
+    where TProgram : class
+{
+    protected override void ConfigureWebHost(
+        IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices(
+            services =>
+            {
+                services.RemoveAll<
+                    DbContextOptions<ApplicationDbContext>>();
+
+                services.RemoveAll<
+                    ApplicationDbContext>();
+
+                services.RemoveAll<
+    IViewComponentHelper>();
+
+                services.AddSingleton<
+                    IViewComponentHelper,
+                    FakeViewComponentHelper>();
+
+                services.AddDbContext<
+                    ApplicationDbContext>(
+                    options =>
+                    {
+                        options.UseInMemoryDatabase(
+                            "E2E_TEST_DB");
+                    });
+
+                services
+                    .AddAuthentication(
+                        options =>
+                        {
+                            options.DefaultAuthenticateScheme =
+                                "Test";
+
+                            options.DefaultChallengeScheme =
+                                "Test";
+                        })
+                    .AddScheme
+                    <
+                        AuthenticationSchemeOptions,
+                        TestAuthHandler
+                    >
+                    (
+                        "Test",
+                        _ => { }
+                    );
+
+                services.AddAuthorization();
+
+                services.RemoveAll<
+                    IDNTCaptchaValidatorService>();
+
+                services.AddSingleton
+                <
+                    IDNTCaptchaValidatorService,
+                    FakeCaptchaValidatorService
+                >();
+
+                var provider =
+                    services.BuildServiceProvider();
+
+                using var scope =
+                    provider.CreateScope();
+
+                var db =
+                    scope.ServiceProvider
+                        .GetRequiredService<
+                            ApplicationDbContext>();
+
+                db.Database.EnsureDeleted();
+
+                db.Database.EnsureCreated();
+            });
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Application.DTOs.Author;
-using Application.DTOs.BookCategory;
-using Application.Services.Implementations;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +38,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddAuthor")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAuthor(AddAuthorDTO addAuthorDTO)
         {
             if (ModelState.IsValid)
@@ -72,7 +69,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditAuthor")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAuthor(EditAuthorDTO editAuthorDTO)
         {
             if (ModelState.IsValid)

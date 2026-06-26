@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Text.RegularExpressions;
-using WebSite.EndPoint.E2ETests.Infrastructure;
+using WebSite.EndPoint.Tests.E2E.Fixtures;
 using Xunit;
 
 namespace WebSite.EndPoint.E2ETests.Controllers;
@@ -29,9 +29,11 @@ public class AccountControllerTests : IClassFixture<CustomWebApplicationFactory<
 
         var html = await response.Content.ReadAsStringAsync();
 
-        html.Should().Contain("PhoneNumber");
-        html.Should().Contain("Password");
-        html.Should().Contain("RememberMe");
+        // چک کردن فیلدها بدون حساسیت به کوتیشن (سازگار با Minification)
+        html.Should().Contain("name=PhoneNumber");
+        html.Should().Contain("name=Password");
+        html.Should().Contain("name=RememberMe");
+        html.Should().Contain("action=/Login");
     }
 
     [Fact]
@@ -43,7 +45,7 @@ public class AccountControllerTests : IClassFixture<CustomWebApplicationFactory<
         {
             ["__RequestVerificationToken"] = antiForgeryToken,
             ["PhoneNumber"] = "09123456789",
-            ["Password"] = "Password123!",   // ← علامت ! اضافه شد
+            ["Password"] = "Password123",
             ["RememberMe"] = "true",
             ["ReturnUrl"] = string.Empty
         };
@@ -57,7 +59,9 @@ public class AccountControllerTests : IClassFixture<CustomWebApplicationFactory<
                 $"Expected 302 but got {(int)response.StatusCode}.\n\nResponse HTML:\n{html}");
         }
 
+
         response.StatusCode.Should().Be(HttpStatusCode.Found);
+
     }
 
     private async Task<string> GetAntiForgeryTokenAsync()
@@ -65,10 +69,10 @@ public class AccountControllerTests : IClassFixture<CustomWebApplicationFactory<
         var response = await _client.GetAsync("/Login");
         var html = await response.Content.ReadAsStringAsync();
 
-        // Regex اصلاح‌شده — بدون escape مضاعف
+        // Regex اصلاح شده برای پیدا کردن توکن چه با کوتیشن چه بدون آن
         var match = Regex.Match(
             html,
-            @"name=[""']?__RequestVerificationToken[""']?\s*(?:type=[""']?hidden[""']?\s+)?value=[""']?([^""'\s>]+)[""']?",
+            @"name=[""']?__RequestVerificationToken[""']?\s+(?:type=[""']?hidden[""']?\s+)?value=[""']?([^""'\s>]+)[""']?",
             RegexOptions.IgnoreCase);
 
         match.Success.Should().BeTrue("the login page must emit an anti-forgery token");
