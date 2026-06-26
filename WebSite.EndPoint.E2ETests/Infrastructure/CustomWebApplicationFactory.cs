@@ -104,10 +104,16 @@ public class FakeViewComponentHelper
     }
 }
 
-public class CustomWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram>
-    where TProgram : class
+public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {
+    private bool _useAuthentication = true;
+    public CustomWebApplicationFactory<TProgram>
+    WithoutAuthentication()
+    {
+        _useAuthentication = false;
+
+        return this;
+    }
     protected override void ConfigureWebHost(
         IWebHostBuilder builder)
     {
@@ -135,27 +141,30 @@ public class CustomWebApplicationFactory<TProgram>
                             "E2E_TEST_DB");
                     });
 
-                services
-                    .AddAuthentication(
-                        options =>
-                        {
-                            options.DefaultAuthenticateScheme =
-                                "Test";
+                if (_useAuthentication)
+                {
+                    services
+                        .AddAuthentication(
+                            options =>
+                            {
+                                options.DefaultAuthenticateScheme =
+                                    "Test";
 
-                            options.DefaultChallengeScheme =
-                                "Test";
-                        })
-                    .AddScheme
-                    <
-                        AuthenticationSchemeOptions,
-                        TestAuthHandler
-                    >
-                    (
-                        "Test",
-                        _ => { }
-                    );
+                                options.DefaultChallengeScheme =
+                                    "Test";
+                            })
+                        .AddScheme
+                        <
+                            AuthenticationSchemeOptions,
+                            TestAuthHandler
+                        >
+                        (
+                            "Test",
+                            _ => { }
+                        );
 
-                services.AddAuthorization();
+                    services.AddAuthorization();
+                }
 
                 services.RemoveAll<
                     IDNTCaptchaValidatorService>();

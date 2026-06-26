@@ -56,7 +56,8 @@ public class AuthorControllerTests
             {
                 Name = "Ali",
                 Family = "Ahmadi",
-                CreateDate = DateTime.Now
+                CreateDate = DateTime.Now,
+                IsDelete = false
             };
 
         db.Authors.Add(author);
@@ -64,6 +65,13 @@ public class AuthorControllerTests
         await db.SaveChangesAsync();
 
         return author.Id;
+    }
+
+    private async Task<string> ReadBody(
+        HttpResponseMessage response)
+    {
+        return await response.Content
+            .ReadAsStringAsync();
     }
 
     [Fact]
@@ -75,10 +83,14 @@ public class AuthorControllerTests
             await _client.GetAsync(
                 "/Authors");
 
+        var body =
+            await ReadBody(response);
+
         response.StatusCode
             .Should()
             .Be(
-                HttpStatusCode.OK);
+                HttpStatusCode.OK,
+                body);
     }
 
     [Fact]
@@ -99,17 +111,16 @@ public class AuthorControllerTests
                 new FormUrlEncodedContent(form));
 
         var body =
-            await response.Content
-                .ReadAsStringAsync();
+            await ReadBody(response);
 
         response.StatusCode
             .Should()
             .Be(
-                HttpStatusCode.OK);
+                HttpStatusCode.OK,
+                body);
 
         body.Should()
-            .Contain(
-                "Success");
+            .Contain("Success");
     }
 
     [Fact]
@@ -124,12 +135,16 @@ public class AuthorControllerTests
                     new Dictionary<string, string>()));
 
         var body =
-            await response.Content
-                .ReadAsStringAsync();
+            await ReadBody(response);
+
+        response.StatusCode
+            .Should()
+            .Be(
+                HttpStatusCode.OK,
+                body);
 
         body.Should()
-            .Contain(
-                "Error");
+            .Contain("Error");
     }
 
     [Fact]
@@ -154,12 +169,16 @@ public class AuthorControllerTests
                 new FormUrlEncodedContent(form));
 
         var body =
-            await response.Content
-                .ReadAsStringAsync();
+            await ReadBody(response);
+
+        response.StatusCode
+            .Should()
+            .Be(
+                HttpStatusCode.OK,
+                body);
 
         body.Should()
-            .Contain(
-                "Success");
+            .Contain("Success");
     }
 
     [Fact]
@@ -175,12 +194,16 @@ public class AuthorControllerTests
                 $"/DeleteAuthor/{id}");
 
         var body =
-            await response.Content
-                .ReadAsStringAsync();
+            await ReadBody(response);
+
+        response.StatusCode
+            .Should()
+            .Be(
+                HttpStatusCode.OK,
+                body);
 
         body.Should()
-            .Contain(
-                "Success");
+            .Contain("Success");
     }
 
     [Fact]
@@ -193,11 +216,15 @@ public class AuthorControllerTests
                 "/DeleteAuthor/999");
 
         var body =
-            await response.Content
-                .ReadAsStringAsync();
+            await ReadBody(response);
+
+        response.StatusCode
+            .Should()
+            .Be(
+                HttpStatusCode.OK,
+                body);
 
         body.Should()
-            .Contain(
-                "Warning");
+            .Contain("Warning");
     }
 }

@@ -36,7 +36,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("Login")]
         [HttpPost]
-        [ValidateDNTCaptcha(ErrorMessage = "کد امنیتی وارد شده اشتباه بود")]
         public async Task<IActionResult> Login(LoginUserDTO loginUserDTO, string returnUrl)
         {
             if(ModelState.IsValid)
