@@ -68,7 +68,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddBook")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBook(AddBookDTO addBookDTO)
         {
             if(ModelState.IsValid)
@@ -142,7 +141,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditBook/{bookId?}")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditBook(EditBookDTO editBookDTO)
         {
             if(ModelState.IsValid)
