@@ -38,7 +38,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddBookCategory")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBookCategory(AddBookCategoryDTO addBookCategoryDTO)
         {
             if (ModelState.IsValid)
@@ -70,7 +69,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditBookCategory")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditBookCategory(EditBookCategoryDTO editBookCategoryDTO)
         {
             if (ModelState.IsValid)
