@@ -15,6 +15,7 @@ namespace Application.DTOs.BookCopy
     {
         public AddBookCopyDTOValidator()
         {
+
             RuleFor(b => b.ShelfLocation)
                 .MaximumLength(100)
                 .WithName("موقعیت قفسه")

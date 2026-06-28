@@ -51,7 +51,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddBookCopy")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBookCopy(AddBookCopyDTO addBookCopyDTO)
         {
             if (ModelState.IsValid)
@@ -83,7 +82,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditBookCopy")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditBookCopy(EditBookCopyDTO editBookCopyDTO)
         {
             if (ModelState.IsValid)
