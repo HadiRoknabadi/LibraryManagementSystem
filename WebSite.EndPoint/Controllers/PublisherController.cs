@@ -40,7 +40,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddPublisher")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPublisher(AddPublisherDTO addPublisherDTO)
         {
             if (ModelState.IsValid)
@@ -72,7 +71,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditPublisher")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPublisher(EditPublisherDTO editPublisherDTO)
         {
             if (ModelState.IsValid)
