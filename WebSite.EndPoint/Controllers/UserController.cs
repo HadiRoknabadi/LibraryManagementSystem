@@ -54,7 +54,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("AddUser")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUser(AddUserDTO userDTO)
         {
             if (ModelState.IsValid)
@@ -118,7 +117,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditUser/{userId?}")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(EditUserDTO editUserDTO)
         {
             if (ModelState.IsValid)
