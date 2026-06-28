@@ -84,7 +84,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("SubmitBorrow")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitBorrow(SubmitBorrowDTO submitBorrowDTO)
         {
             if (ModelState.IsValid)
@@ -118,7 +117,6 @@ namespace WebSite.EndPoint.Controllers
 
         [Route("EditBorrow")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditBorrow(EditBorrowDTO editBorrowDTO)
         {
             if (ModelState.IsValid)

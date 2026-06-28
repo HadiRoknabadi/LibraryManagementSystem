@@ -1,4 +1,5 @@
-﻿using DNTCaptcha.Core;
+﻿using Application.Services.Interfaces;
+using DNTCaptcha.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Persistence.Context;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using WebSite.EndPoint.Tests.E2E.Fakes;
 
 namespace WebSite.EndPoint.Tests.E2E.Fixtures;
 
@@ -140,6 +142,10 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                         options.UseInMemoryDatabase(
                             "E2E_TEST_DB");
                     });
+
+                services.RemoveAll<IQuestPDFService>();
+
+                services.AddScoped<IQuestPDFService, FakeQuestPdfService>();
 
                 if (_useAuthentication)
                 {
