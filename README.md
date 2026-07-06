@@ -50,6 +50,7 @@
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=LibraryDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
 }
+```
 
 ۳. ایجاد دیتابیس و جدول‌ها
 روش اول: استفاده از ابزار Migration (توصیه شده)
