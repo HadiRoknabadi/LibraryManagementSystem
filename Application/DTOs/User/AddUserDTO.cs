@@ -39,7 +39,7 @@ namespace Application.DTOs.User
                 .WithMessage("{PropertyName} را وارد کنید")
                 .Length(11)
                 .WithMessage("{PropertyName} باید دقیقا {MinLength} کاراکتر باشد")
-                .Matches(@"^09(0[1-9]|1[0-9]|2[0-9]|3[0-9]|9[0-9]).{7}$")
+                .Matches(@"^09\d{9}$")
                 .WithMessage("{PropertyName} وارد شده نامعتبر است");
 
             RuleFor(u => u.MembershipCode)
