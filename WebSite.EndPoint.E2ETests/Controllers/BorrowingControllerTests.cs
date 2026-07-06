@@ -232,9 +232,8 @@ public class BorrowingControllerTests
                 ["BookCopyId"] =
                     copy.Id.ToString(),
 
-                // تاریخ شمسی
                 ["DueDate"] =
-                    "1405/04/12"
+                    "1405/12/12"
             };
 
         var response =

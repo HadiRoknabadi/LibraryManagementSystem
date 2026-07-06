@@ -45,31 +45,24 @@ public class UserControllerTests
 
     private async Task<int> SeedAdminRole()
     {
-        using var scope =
-            _factory.Services.CreateScope();
+        using var scope = _factory.Services.CreateScope();
 
-        var db =
-            scope.ServiceProvider
-                .GetRequiredService<ApplicationDbContext>();
+        var roleManager =
+            scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
-        var existing =
-            db.Roles
-                .FirstOrDefault(r =>
-                    r.Name == "Admin");
+        var existing = await roleManager.FindByNameAsync("Admin");
 
         if (existing != null)
             return existing.Id;
 
-        var role =
-            new Domain.Entities.Account.Role
-            {
-                Name = "Admin",
-                NormalizedName = "ADMIN"
-            };
+        var role = new Role
+        {
+            Name = "Admin"
+        };
 
-        db.Roles.Add(role);
+        var result = await roleManager.CreateAsync(role);
 
-        await db.SaveChangesAsync();
+        result.Succeeded.Should().BeTrue();
 
         return role.Id;
     }
@@ -166,7 +159,6 @@ public class UserControllerTests
                 ["PhoneNumber"] = "09121234567",
                 ["Password"] = "Test12345",
 
-                // مهم
                 ["RoleName"] = "Admin"
             };
 

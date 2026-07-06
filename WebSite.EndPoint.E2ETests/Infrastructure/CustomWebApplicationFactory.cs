@@ -139,8 +139,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                     ApplicationDbContext>(
                     options =>
                     {
-                        options.UseInMemoryDatabase(
-                            "E2E_TEST_DB");
+                        options.UseInMemoryDatabase("E2E_TEST_DB");
                     });
 
                 services.RemoveAll<IQuestPDFService>();
